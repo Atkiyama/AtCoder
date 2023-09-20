@@ -1,0 +1,113 @@
+from functools import lru_cache
+import sys
+sys.setrecursionlimit(10**9)
+# input = sys.stdin.readline
+from decimal import Decimal
+from functools import cmp_to_key
+from collections import Counter
+from itertools import permutations
+from itertools import combinations
+from itertools import combinations_with_replacement
+from itertools import product
+from itertools import accumulate
+from itertools import groupby
+from itertools import pairwise
+from copy import deepcopy
+import networkx as nx
+import networkx.algorithms as nxa
+import numpy as np
+import math
+import heapq
+from collections import OrderedDict
+import bisect
+from collections import deque
+from collections import defaultdict
+
+
+'''
+https://twitter.com/e869120/status/1381739128291614720/photo/1
+UnionFindを使う問題
+'''
+def main():
+    H, W= map(int, input().split())
+    # H+=1
+    # W+=1
+    Q=int(input())
+    UF=UnionFind(H*W)
+    used = [[False for _ in range(W)] for _ in range(H)]
+    for i in range(Q):
+        tmp=list(map(int,input().split()))
+        #print(input1)
+      
+        if tmp[0]==1:
+            r=tmp[1]-1
+            c=tmp[2]-1
+            used[r][c]=True
+
+            for dx, dy in [[1,0], [-1,0], [0,1], [0,-1]]:
+                next_r = r + dy
+                next_c = c + dx
+                if 0 <= next_r <= H-1 and 0 <= next_c <= W-1 and used[next_r][next_c] == True:
+                    UF.union(r*W+c, next_r*W+next_c)
+        else:
+            ra=tmp[1]-1
+            ca=tmp[2]-1
+            rb=tmp[3]-1
+            cb=tmp[4]-1
+            if used[ra][ca] and used[rb][cb] and UF.same(ra*W+ca,rb*W+cb):
+                print("Yes")
+            else:
+                print("No")
+
+
+class UnionFind():
+    def __init__(self, n):
+        self.n = n
+        self.parents = [-1] * n
+
+    def find(self, x):
+        if self.parents[x] < 0:
+            return x
+        else:
+            self.parents[x] = self.find(self.parents[x])
+            return self.parents[x]
+
+    def union(self, x, y):
+        x = self.find(x)
+        y = self.find(y)
+
+        if x == y:
+            return
+
+        if self.parents[x] > self.parents[y]:
+            x, y = y, x
+
+        self.parents[x] += self.parents[y]
+        self.parents[y] = x
+
+    def size(self, x):
+        return -self.parents[self.find(x)]
+
+    def same(self, x, y):
+        return self.find(x) == self.find(y)
+
+    def members(self, x):
+        root = self.find(x)
+        return [i for i in range(self.n) if self.find(i) == root]
+
+    def roots(self):
+        return [i for i, x in enumerate(self.parents) if x < 0]
+
+    def group_count(self):
+        return len(self.roots())
+
+    def all_group_members(self):
+        group_members = defaultdict(list)
+        for member in range(self.n):
+            group_members[self.find(member)].append(member)
+        return group_members
+
+    def __str__(self):
+        return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
+if __name__ == "__main__":
+    main()
