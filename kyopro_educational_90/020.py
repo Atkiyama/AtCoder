@@ -22,8 +22,17 @@ from collections import OrderedDict
 import bisect
 from collections import deque
 from collections import defaultdict
-
+'''
+logを使うと見せかけて整数計算を使う問題
+logの計算やfloat型の計算では誤差がでるので整数計算を使うことによって誤差を減らすことができる
+なので変数も整数型を使うこと
+'''
 def main():
+    a,b,c=map(int,input().split())
+    if a<c**b:
+        print("Yes")
+    else:
+        print("No")
 
 
 class UnionFind():

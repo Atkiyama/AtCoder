@@ -22,9 +22,27 @@ from collections import OrderedDict
 import bisect
 from collections import deque
 from collections import defaultdict
-
+'''
+https://twitter.com/e869120/status/1384276005330690049/photo/1
+三角関数を使う問題
+sin,cos,tanやartanなども使うことを考えること
+'''
 def main():
+    T=int(input())
+    L,X,Y=map(int,input().split())
+    Q=int(input())
+    for q in range(Q):
+        E=int(input())
+        print(query(T,L,X,Y,E))
 
+def query(T,L,X,Y,E):
+    x=0
+    y=-L/2*math.sin(math.pi*E/T*2)
+    z=L/2-L/2*math.cos(math.pi*E/T*2)
+    A=math.sqrt((x-X)**2+(Y-y)**2)
+    B=z
+    kaku = np.arctan2(B, A)
+    return kaku * 180.0 / math.pi
 
 class UnionFind():
     def __init__(self, n):

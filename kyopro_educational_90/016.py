@@ -22,8 +22,27 @@ from collections import OrderedDict
 import bisect
 from collections import deque
 from collections import defaultdict
-
+'''
+https://twitter.com/e869120/status/1383189464650981378/photo/1
+工夫した全探索をする問題。本来ならL^3になりそうな計算量をbをL-a回に減らし、cはaとbをもとに計算量を減らせる
+全探索でも工夫して計算量は減らすことができる
+'''
 def main():
+    ans=1 << 30
+    N=int(input())
+    L=10000
+    A,B,C=map(int,input().split())
+    #print(N,A,B,C)
+    for a in range(L):
+        for b in range(L-a):
+            V=N-A*a-B*b
+            c=V//C
+            R=a+b+V//C
+            if V % C != 0 or V < 0 or R > 9999:
+                continue
+            ans = min(ans, R)
+
+    print(ans)
 
 
 class UnionFind():
