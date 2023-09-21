@@ -23,7 +23,52 @@
 # from collections import deque
 from collections import defaultdict
 
+'''
+https://twitter.com/e869120/status/1388262816101007363/photo/1
+二次元配列を作成してそれに値を加算していくことで解がもとまる
+このときに二次元いもす法が使えるのでそれを覚えよう
+'''
+
 def main():
+        # Input
+    N = int(input())
+    lx = [0] * (1 << 18)
+    ly = [0] * (1 << 18)
+    rx = [0] * (1 << 18)
+    ry = [0] * (1 << 18)
+
+    # Count Number
+    cnt = [[0] * 1009 for _ in range(1009)]
+    Answer = [0] * (1 << 18)
+
+    # Step #1. Input
+    for i in range(1, N + 1):
+        lx[i], ly[i], rx[i], ry[i] = map(int, input().split())
+
+    # Step #2. Imos Method in 2D
+    for i in range(1, N + 1):
+        cnt[lx[i]][ly[i]] += 1
+        cnt[lx[i]][ry[i]] -= 1
+        cnt[rx[i]][ly[i]] -= 1
+        cnt[rx[i]][ry[i]] += 1
+
+    for i in range(1001):
+        for j in range(1, 1001):
+            cnt[i][j] += cnt[i][j - 1]
+
+    for i in range(1, 1001):
+        for j in range(1001):
+            cnt[i][j] += cnt[i - 1][j]
+
+    # Step #3. Count Number
+    for i in range(1001):
+        for j in range(1001):
+            if cnt[i][j] >= 1:
+                Answer[cnt[i][j]] += 1
+
+    # Step #4. Output The Answer
+    for i in range(1, N + 1):
+        print(Answer[i])
 
 
 class UnionFind():

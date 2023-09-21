@@ -1,29 +1,38 @@
-# from functools import lru_cache
-# import sys
-# sys.setrecursionlimit(10**9)
-# # input = sys.stdin.readline
-# from decimal import Decimal
-# from functools import cmp_to_key
-# from collections import Counter
-# from itertools import permutations
-# from itertools import combinations
-# from itertools import combinations_with_replacement
-# from itertools import product
-# from itertools import accumulate
-# from itertools import groupby
-# from itertools import pairwise
-# from copy import deepcopy
-# import networkx as nx
-# import networkx.algorithms as nxa
-# import numpy as np
-# import math
-# import heapq
-# from collections import OrderedDict
-# import bisect
-# from collections import deque
+from functools import lru_cache
+import sys
+sys.setrecursionlimit(10**9)
+# input = sys.stdin.readline
+from decimal import Decimal
+from functools import cmp_to_key
+from collections import Counter
+from itertools import permutations
+from itertools import combinations
+from itertools import combinations_with_replacement
+from itertools import product
+from itertools import accumulate
+from itertools import groupby
+from itertools import pairwise
+from copy import deepcopy
+import networkx as nx
+import networkx.algorithms as nxa
+import numpy as np
+import math
+import heapq
+from collections import OrderedDict
+import bisect
+from collections import deque
 from collections import defaultdict
-
+'''
+https://twitter.com/e869120/status/1385725481920520193/photo/1
+ユークリッドの互助法を使う問題
+今回の問題の答えはA,B,Cの最大公約数になる
+そのためユークリッドの互助法を利用しよう
+'''
 def main():
+    A,B,C=map(int,input().split())
+    r=math.gcd(A,B,C)
+    ans=(A-1)//r+(B-1)//r+(C-1)//r
+    print(ans)
 
 
 class UnionFind():

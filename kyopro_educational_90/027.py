@@ -23,7 +23,19 @@
 # from collections import deque
 from collections import defaultdict
 
+'''
+https://twitter.com/e869120/status/1387538790017769474
+setを使う問題
+アカウントが既存がどうかを判断するのにlistを使うと計算量が足りないので集合を使うこと
+'''
 def main():
+    acount = set()
+    N=int(input())
+    for i in range(N):
+        S=input()
+        if not S in acount:
+            print(i+1)
+            acount.add(S)
 
 
 class UnionFind():

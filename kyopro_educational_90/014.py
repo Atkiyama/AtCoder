@@ -37,6 +37,7 @@ def main():
     for i in range(N):
         cost+=abs(A[i]-B[i])
     print(cost)
+    
         
 
 if __name__ == "__main__":
