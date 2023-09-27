@@ -19,14 +19,27 @@
 # import math
 # import heapq
 # from collections import OrderedDict
-# import bisect
+import bisect
 # from collections import deque
 from collections import defaultdict
-INF = 10 ** 18
+INF = 10 ** 10
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
 def main():
+    K=int(input())
+    ans=[]
+    for i in range(2,1 <<10):
+        x=0
+        for j in range(9,-1,-1):
+            if(i&(1 <<j)):
+                x*=10
+                x+=j
+        
+        ans.append(x)
+
+    ans.sort()
+    print(ans[K-1])
     
 def checkIndex(list,i):
     length=len(list)

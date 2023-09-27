@@ -9,7 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-# from itertools import accumulate
+from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -19,7 +19,7 @@
 # import math
 # import heapq
 # from collections import OrderedDict
-# import bisect
+import bisect
 # from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
@@ -27,6 +27,18 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
 def main():
+    N,M,P=map(int,input().split())
+    A=list(map(int,input().split()))
+    B=list(map(int,input().split()))
+    #A.sort()
+    B.sort()
+    sum=0
+    culsum_B=[0]+list(accumulate(B))
+    for i in range(N):
+        j=bisect.bisect_left(B,P-A[i])
+        sum+=culsum_B[j]+P*(M-j)+A[i]*j
+        #print(sum)
+    print(sum)
     
 def checkIndex(list,i):
     length=len(list)

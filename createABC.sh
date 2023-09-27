@@ -21,10 +21,12 @@ else
 fi
 
 # main.pyからa.py、b.py、c.py、d.pyをコピー
-cp "main.py" "$dir_name/$dir_name _a.py"
-cp "main.py" "$dir_name/$dir_name _b.py"
-cp "main.py" "$dir_name/$dir_name _c.py"
-cp "main.py" "$dir_name/$dir_name _d.py"
+cp "main.py" "$dir_name/$dir_name""A.py"
+cp "main.py" "$dir_name/$dir_name""B.py"
+cp "main.py" "$dir_name/$dir_name""C.py"
+cp "main.py" "$dir_name/$dir_name""D.py"
+cp "main.py" "$dir_name/$dir_name""E.py"
+
 
 # ファイルが正常にコピーされたか確認
 if [ $? -eq 0 ]; then

@@ -17,32 +17,36 @@
 # import networkx.algorithms as nxa
 # import numpy as np
 # import math
-# import heapq
+import heapq
 # from collections import OrderedDict
 # import bisect
 # from collections import deque
 from collections import defaultdict
-INF = 10 ** 18
-dx = [1, 0, -1, 0]
-dy = [0, 1, 0, -1]
-dxy=[(1,0),(0,1),(-1,0),(0,-1)]
-def main():
-    
-def checkIndex(list,i):
-    length=len(list)
-    
-    if 0<=i<length:
-        return True
-    else:
-        return False
 
-def checkIndex2(list,i,j):
-    H=len(list)
-    W=len(list[0])
-    if 0<=i<H and 0<=j<W:
-        return True
-    else:
-        return False
+def main():
+    N,M=map(int,input().split())
+    A=list(range(N))
+    event=[]
+    eat=[0 for _ in range(N)]
+    for i in range(M):
+        T,W,S=map(int,input().split())
+        event.append((T,W,S))
+        
+    while event:
+        T,W,S = heapq.heappop(event)
+        if W == -1:
+            heapq.heappush(A,S)
+        else:
+            if len(A) == 0:
+                continue
+            eater=heapq.heappop(A)
+            eat[eater]+=W
+            #Sの部分に人を記録しておくと取り出したときに並び直す人を一発で特定できる
+            heapq.heappush(event,(T+S,-1,eater))
+    for eater in eat:
+        print(eater)
+
+
 class UnionFind():
     def __init__(self, n):
         self.n = n

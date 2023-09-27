@@ -23,49 +23,46 @@ import bisect
 from collections import deque
 from collections import defaultdict
 
+'''
+DFSやBFSを使ってグラフの直径を求める問題
+1.原点から最も離れた点を求める
+2.その点から最も離れた点を求める
+https://twitter.com/e869120/status/1377752658149175299
+'''
 def main():
     
     N=int(input())
-    for i in range(1 <<N):
-        st=""
-        for j in range(N-1,-1,-1):
-            if(i & (1 <<j) ==0):
-                st+="("
-            else:
-                st+=")"
-        if judge(st):
-            print(st)
-        
-def judge(st):
-    front=0
-    back=0
-    for i in st:
-        if i=="(":
-            front+=1
-        else:
-            back+=1
-        if front<back:
-            return False
-    if front==back:
-        return True
-    else:
-        return False
-        
+    dict=defaultdict(list)
+    for i in range(N-1):
+        A,B=map(int,input().split())
+        A-=1
+        B-=1
+        dict[A].append(B)
+        dict[B].append(A)
+    #print(bfs(N,dict,3))
+    _,hasi=bfs(N,dict,0)
+    #print(hasi)
+    ans,_=bfs(N,dict,hasi)
+    print(ans+1)
     
         
-    
 
-def solve(M,A,K,L,N):
-    count=0
-    pre = 0
-    for i in range(1,N+1):
-        if A[i]-pre>=M and L-A[i]>=M:
-            count+=1
-            pre=A[i]
+def bfs(N,dict,start):
+    q=deque([start])
+    lenDict=defaultdict(int)
+    lenDict[start]=0
+    length=0
+    place=-1
+    while q:
+        now=q.pop()
+        for i in dict[now]:
+            if i!=start and lenDict[i]==0:
+                q.append(i)
+                lenDict[i]=lenDict[now]+1
+                if lenDict[i]>length:
+                    length=lenDict[i]
+                    place=i
         
-    #print(count,end=",")
-    # print(count>K,end=",")
-    
-    return count >=K
+    return length,place
 if __name__ == "__main__":
     main()

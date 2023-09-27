@@ -27,6 +27,22 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
 def main():
+   N,X=map(int,input().split())
+   A=list(map(int,input().split()))
+   A.sort()
+   minimum = A.pop(0)
+   highest = A.pop(N-3)
+   ans=X-sum(A)
+   if X-sum(A)-minimum <=0:
+       print(0)
+   elif ans <=highest:
+       print(ans)
+   else:
+       print(-1)
+   
+            
+        
+        
     
 def checkIndex(list,i):
     length=len(list)
