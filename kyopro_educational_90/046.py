@@ -26,9 +26,40 @@ INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
+
+'''
+https://twitter.com/e869120/status/1395873457259225091/photo/1
+なるべくおなじものを先に計算しておく
+N^3はアウトだが46^3ならセーフ
+なのでA,B,Cにおいてそれぞれ除算結果が0~45の数の総数を求めておくと46^3で計算できる
+'''
 def main():
+    dictA=defaultdict(int)
+    dictB=defaultdict(int)
+    dictC=defaultdict(int)
     
+    N=int(input())
+    A=list(map(mod,input().split()))
+    B=list(map(mod,input().split()))
+    C=list(map(mod,input().split()))
+    ans=0
+    for i in range(N):
+        dictA[A[i]]+=1
+        dictB[B[i]]+=1
+        dictC[C[i]]+=1
+    # print(dictA)
+    # print(dictB)
+    # print(dictC)
+    for i in range(46):
+        for j in range(46):
+            for k in range(46):
+                if((i+j+k)%46==0):
+                    ans+=dictA[i]*dictB[j]*dictC[k]
+                    
+    print(ans)
     
+def mod(n):
+    return int(n)%46
 
 def swap(A,i,j):
     tmp=A[i]

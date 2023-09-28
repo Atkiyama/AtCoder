@@ -17,7 +17,7 @@
 # import networkx.algorithms as nxa
 # import numpy as np
 # import math
-# import heapq
+import heapq
 # from collections import OrderedDict
 # import bisect
 # from collections import deque
@@ -26,7 +26,26 @@ INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
+
+'''
+https://twitter.com/e869120/status/1396960059796582400/photo/1
+1分で手に入る点数はBかA-Bなのでそれをヒープに突っ込んでK個上からとってくればいい
+'''
 def main():
+    N,K=map(int,input().split())
+    q=[]
+    for i in range(N):
+        A,B=map(int,input().split())
+        heapq.heappush(q,B*-1)
+        heapq.heappush(q,(A-B)*-1)
+    
+    
+    ans=0
+    for k in range(K):
+        ans+=heapq.heappop(q)*-1
+    print(ans)
+    
+        
     
     
 

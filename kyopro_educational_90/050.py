@@ -16,7 +16,7 @@
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-# import math
+import math
 # import heapq
 # from collections import OrderedDict
 # import bisect
@@ -27,7 +27,15 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
 def main():
-    
+    N,L=map(int,input().split())
+    ans=0
+    #iはLの数
+    for i in range((N//L)+1):
+        step=N-L*i+i
+        ans+=math.factorial(step)//(math.factorial(step-i)*math.factorial(i))
+        ans%=10**9+7
+        print(ans)
+    print(ans)
     
 
 def swap(A,i,j):

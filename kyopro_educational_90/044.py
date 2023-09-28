@@ -26,18 +26,41 @@ INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
+
+'''
+https://twitter.com/e869120/status/1395148057730187265/photo/1
+見かけ上の変化を気にする問題
+愚直にやるとTLEになる。
+そこでシフトした回数を記録しておいて参照する際はシフト数参考にを参照先をずらせばよい
+シフトした数を減算するとインデックスから外れるのでNを加えて剰余を使えばよい
+左シフトでも剰余を使える
+'''
 def main():
-    
-    
+    N,Q=map(int,input().split())
+    A=list(map(int,input().split()))
+    shift=0
+    for i in range(Q):
+        T,x,y=map(int,input().split())
+        x,y=map(basezero,(x,y))
+        if T==1:
+            swap(A,(x-shift+len(A))%len(A),(y-shift+len(A))%len(A))
+        elif T==2:
+            shift+=1
+        else:
+            print(A[(x-shift+N)%len(A)])
+        # print(A)
+
 
 def swap(A,i,j):
+    # print(A[i],end=",")
+    # print(A[j])
     tmp=A[i]
     A[i]=A[j]
     A[j]=tmp
     
 def basezero(num):
     return num-1
-
+    
 def checkIndex(list,i):
     length=len(list)
     

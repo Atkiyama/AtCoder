@@ -55,31 +55,27 @@ def bfs(H,W,rs,cs,rt,ct,S):
         for j in range(W):
             if S[i][j] =='#':
                 history[i][j]=True
-    print(history)
+    #print(history)
     while q:
-        now = q.pop()
+        now = q.popleft()
         print(now)
         for i in range(4):
-            x=now[0]+dx[i]
-            y=now[1]+dy[i]
-            
-            if checkIndex2(history,x,y) and not history[x][y]:
-                q.append((x,y))
-                history[x][y]=True
-                for j in range(4):
-                    if i!=j:
-                        next=dist[now[0]][now[1]][j]+1
-                    else:
-                        next=dist[now[0]][now[1]][j]
-                    if next < dist[x][y][j]:
-                        dist[x][y][j]=next
-    sum=0
+            x = now[0] + dx[i]
+            y = now[1] + dy[i]
+                    
+            if checkIndex2(history, x, y) and not history[x][y]:
+                q.append((x, y))
+                history[x][y] = True
+                next = dist[now[0]][now[1]][i] + (i != j)  # i番目の方向に対する距離を更新
+                if next < dist[x][y][i]:
+                    dist[x][y][i] = next
+
+
+    ans=INF
     for i in range(4):
-        sum+=dist[rt][ct][i]
-    
-        
-    
-    return sum 
+        ans=min(ans,dist[rt][ct][i])
+    return ans
+
 def checkIndex2(list,i,j):
     H=len(list)
     W=len(list[0])
