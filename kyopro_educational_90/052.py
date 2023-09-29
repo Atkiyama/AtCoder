@@ -16,7 +16,7 @@
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-import math
+# import math
 # import heapq
 # from collections import OrderedDict
 # import bisect
@@ -27,25 +27,22 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
 '''
-https://twitter.com/e869120/status/1397684795560259586/photo/1
-漸化式を立ててそれをdpに落とし込む問題
-今回だとi=0のときはdp[i]=0
-i<Lのときはdp[i]=dp[i-1]
-それ以上のときはdp[i]=dp[i-1]+dp[i-L]という漸化式が成り立つ
+https://twitter.com/e869120/status/1398409831044632576/photo/1
+因数分解を使う手法
+N=2の通常のサイコロを考えるとわかりやすい
+このとき合計は(1+2+..6)*(1;2+...6)と因数分解できる
+これをあとはN個でやっていくだけ
 '''
 def main():
-    N,L=map(int,input().split())
-    dp=[0]*(N+1)
-    dp[0]=1
-    for i in range(1,N+1):
-        if i<L:
-            dp[i]=dp[i-1]
-        else:
-            dp[i]=dp[i-1]+dp[i-L]
-        dp[i]%=10**9+7
-            
-            
-    print(dp[N])
+    N=int(input())
+    ans=1
+    for i in range(N):
+        A=list(map(int,input().split()))
+        ans*=sum(A)
+        ans%=10**9+7
+
+    print(ans)        
+    
     
 
 def swap(A,i,j):

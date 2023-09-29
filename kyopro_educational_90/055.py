@@ -6,7 +6,7 @@
 # from functools import cmp_to_key
 # from collections import Counter
 # from itertools import permutations
-# from itertools import combinations
+from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
 # from itertools import accumulate
@@ -16,7 +16,7 @@
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-import math
+# import math
 # import heapq
 # from collections import OrderedDict
 # import bisect
@@ -27,25 +27,19 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
 '''
-https://twitter.com/e869120/status/1397684795560259586/photo/1
-漸化式を立ててそれをdpに落とし込む問題
-今回だとi=0のときはdp[i]=0
-i<Lのときはdp[i]=dp[i-1]
-それ以上のときはdp[i]=dp[i-1]+dp[i-L]という漸化式が成り立つ
+https://twitter.com/e869120/status/1399859200046505984/photo/1
+計算量をN^5と見積もるとTLEかと思われるが実際は100C5なのでセーフ
 '''
 def main():
-    N,L=map(int,input().split())
-    dp=[0]*(N+1)
-    dp[0]=1
-    for i in range(1,N+1):
-        if i<L:
-            dp[i]=dp[i-1]
-        else:
-            dp[i]=dp[i-1]+dp[i-L]
-        dp[i]%=10**9+7
-            
-            
-    print(dp[N])
+    N,P,Q=map(int,input().split())
+    
+    A = list(map(int,input().split()))
+    ans = 0
+    for a, b, c, d, e in combinations(A, 5):
+        if a % P * b % P * c % P * d % P * e % P == Q: 
+            ans += 1
+
+    print(ans)
     
 
 def swap(A,i,j):
