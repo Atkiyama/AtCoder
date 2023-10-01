@@ -25,40 +25,47 @@ from collections import defaultdict
 INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
-dxy=[(1,0),(0,1),(-1,0),(0,-1)]
+dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+
 def main():
-    N=int(input())
-    S=input()
-    ans=S.find('ABC')+1
-    if ans==0:
+    N = int(input())
+    S = input()
+    ans = S.find('ABC')+1
+    if ans == 0:
         print(-1)
     else:
         print(ans)
-    
 
-def swap(A,i,j):
-    tmp=A[i]
-    A[i]=A[j]
-    A[j]=tmp
-    
+
+def swap(A, i, j):
+    tmp = A[i]
+    A[i] = A[j]
+    A[j] = tmp
+
+
 def basezero(num):
     return num-1
 
-def checkIndex(list,i):
-    length=len(list)
-    
-    if 0<=i<length:
+
+def checkIndex(list, i):
+    length = len(list)
+
+    if 0 <= i < length:
         return True
     else:
         return False
 
-def checkIndex2(list,i,j):
-    H=len(list)
-    W=len(list[0])
-    if 0<=i<H and 0<=j<W:
+
+def checkIndex2(list, i, j):
+    H = len(list)
+    W = len(list[0])
+    if 0 <= i < H and 0 <= j < W:
         return True
     else:
         return False
+
+
 class UnionFind():
     def __init__(self, n):
         self.n = n
@@ -108,12 +115,19 @@ class UnionFind():
 
     def __str__(self):
         return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
+
+
 def yes():
     print("Yes")
+
+
 def no():
     print("No")
+
+
 def minusOne():
     print(-1)
-    
+
+
 if __name__ == "__main__":
     main()
