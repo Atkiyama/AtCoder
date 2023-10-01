@@ -9,7 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-# from itertools import accumulate
+from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -29,6 +29,18 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N, Q = map(int, input().split())
+    A = list(map(int, input().split()))
+    acc = list(accumulate(A))
+    ans = 0
+    for i in A:
+        ans += abs(i)
+    for _ in range(Q):
+        L, R, V = map(int, input().split())
+        acc[L-1] += V
+        acc[R-1] += V
+        ans += V
+        print(ans)
 
 
 def swap(A, i, j):

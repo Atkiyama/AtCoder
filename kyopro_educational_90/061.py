@@ -27,8 +27,24 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
+'''
+https://twitter.com/e869120/status/1402395219287371779/photo/1
+dequeを使う問題だが配列で十分いける
+キューもn番目を参照できるらしい
+'''
+
 
 def main():
+    Q = int(input())
+    deck = []
+    for _ in range(Q):
+        t, x = map(int, input().split())
+        if t == 1:
+            deck.insert(0, x)
+        elif t == 2:
+            deck.append(x)
+        else:
+            print(deck[x-1])
 
 
 def swap(A, i, j):

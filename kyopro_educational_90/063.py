@@ -4,11 +4,11 @@
 # # input = sys.stdin.readline
 # from decimal import Decimal
 # from functools import cmp_to_key
-# from collections import Counter
+from collections import Counter
 # from itertools import permutations
 # from itertools import combinations
 # from itertools import combinations_with_replacement
-# from itertools import product
+from itertools import product
 # from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
@@ -27,8 +27,40 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
+'''
+https://twitter.com/e869120/status/1403121388773249024/photo/1
+Hの制約がやたらと小さいことに着目
+なので各行に対してビット全探索をかけられる
+なのでビットで探索した各列に対して同じ数字かどうか確認をしよう
+集合やcouneter()が便利なのでついでに使い方を覚えよう
+'''
+
 
 def main():
+    H, W = map(int, input().split())
+    P = []
+    P = [list(map(int, input().split())) for _ in range(H)]
+    ans = 0
+    for bit in product([0, 1], repeat=H):
+        ans = max(ans, calc(bit, H, W, P))
+    print(ans)
+
+
+def calc(bit, H, W, P):
+    column = 0
+    for i in bit:
+        if i == 1:
+            column += 1
+    counter = Counter()
+    for i in range(W):
+        num = []
+        for j in range(H):
+            if bit[j] == 1:
+                num.append(P[j][i])
+        # 集合にすると重複が許されないので全ての要素が同じならサイズが1になるはず
+        if len(set(num)) == 1:
+            counter[num[0]] += 1
+    return max(counter.values()) * column if len(counter) > 0 else 0
 
 
 def swap(A, i, j):
