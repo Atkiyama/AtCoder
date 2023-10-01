@@ -26,38 +26,24 @@ INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy=[(1,0),(0,1),(-1,0),(0,-1)]
-
-'''
-周期性を考える問題
-この問題を実際にシュミレートしてみると周期的に変化していることに気づける
-あとはその周期性をもとに解を求めればいい
-'''
 def main():
-
-    N,K=map(int,input().split())
-    history=[-1 for _ in range(100000)]
-    cycle=[]
-    z=N
-    cycle.append(z)
-    for i in range(K):
-        y=0
-        for j in str(z):
-            y+=int(j)
-        z+=y
-        z%=10**5
-        if history[z]!=-1:
-            break
+    N,M=map(int,input().split())
+    A=list(map(int,input().split()))
+    A=map(basezero,A)
+    aset=set(A)
+    ans=[0 for _ in range(N)]
+    last=0
+    for i in range(N-1,-1,-1):
+        if i in aset:
+            last=0
+            ans[i]=0
         else:
-            history[z]=i
-            cycle.append(z)
-        #print(z)
-    cycle=cycle[history[z]+1:]
-    #print(cycle)
-    ans=cycle[(K-history[z]-1)%len(cycle)]
-    print(ans)
-        
-        
-        
+            last+=1
+            ans[i]=last
+    #print(ans)
+    for i in ans:
+        print(i)
+    
     
 
 def swap(A,i,j):
