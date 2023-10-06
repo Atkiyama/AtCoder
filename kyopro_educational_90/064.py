@@ -27,19 +27,36 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
+'''
+https://twitter.com/e869120/status/1403483256234799105/photo/1
+階差を考える問題
+階差数列を考えてその変動を追うと各々O(1)で処理できることがわかる
+'''
+
 
 def main():
     N, Q = map(int, input().split())
     A = list(map(int, input().split()))
-    acc = list(accumulate(A))
+    # 階差
+    rankA = [0] * (N)
     ans = 0
-    for i in A:
-        ans += abs(i)
-    for _ in range(Q):
+    for i in range(N-1):
+        rankA[i] = (A[i+1]-A[i])
+        ans += abs(rankA[i])
+    # print(ans)
+    for i in range(Q):
         L, R, V = map(int, input().split())
-        acc[L-1] += V
-        acc[R-1] += V
-        ans += V
+        L -= 2
+        R -= 1
+        prev = abs(rankA[R])+abs(rankA[L])
+        if L > -1:
+            rankA[L] += V
+        if R < N-1:
+            rankA[R] -= V
+        after = abs(rankA[R])+abs(rankA[L])
+        ans += after-prev
+        # print(prev, after)
+        # print(rankA)
         print(ans)
 
 
