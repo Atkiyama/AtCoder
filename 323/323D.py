@@ -17,7 +17,7 @@
 # import networkx.algorithms as nxa
 # import numpy as np
 # import math
-# import heapq
+import heapq
 # from collections import OrderedDict
 import bisect
 # from collections import deque
@@ -30,34 +30,23 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 def main():
     N = int(input())
-    sc = []
-    dict = defaultdict(int)
-    for i in range(N):
-        S, C = map(int, input().split())
-        sc.append((S, C))
-        dict[S] = C
-    # scはソート済みなので順番はこれを当てにする
-    sorted(sc)
-    i = 0
-    while i < len(sc):
-        s, c = sc[i]
-        c = dict[s]
-        dict[s] %= 2
-        if dict[s*2] == 0 and c//2 != 0:
-            index = bisect.bisect_left(sc, (s*2, c//2))
-            sc.insert(index, (s*2, c//2))
-            if index <= i:
-                i -= 1
-            # print("ここ")
-            #print(c, c//2)
-        dict[s*2] += c//2
-        # print(dict)
-        i += 1
-        #print(i, sc)
-    sum = 0
-    for s, c in dict.items():
-        sum += c
-    print(sum)
+
+    Q = [tuple(map(int, input().split())) for _ in range(N)]
+    heapq.heapify(Q)
+
+    ans = 0
+    # キューに同じサイズのものがあってもOK
+    while len(Q):
+        s, c = heapq.heappop(Q)
+        # 同じサイズのものを全て取り出してcに格納
+        while len(Q) and Q[0][0] == s:
+            ss, cc = heapq.heappop(Q)
+            c += cc
+        ans += c % 2
+        if c > 1:
+            # 一つ上のサイズにpush
+            heapq.heappush(Q, (s*2, c//2))
+    print(ans)
 
 
 def swap(A, i, j):

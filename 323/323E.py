@@ -29,6 +29,9 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N, X = map(int, input().split())
+    T = list(map(int, input().split()))
+    dp = [[]]
 
 
 def swap(A, i, j):
