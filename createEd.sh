@@ -18,7 +18,7 @@ if [ ! -d "kyopro_educational_90" ]; then
 fi
 
 # main.py をコピーしてファイルを作成
-cp "main.py" "kyopro_educational_90/${formatted_number}.py"
+cp "main.py" "kyopro_educational_90/code/${formatted_number}.py"
 
 # ファイルが正常に作成されたか確認
 if [ $? -eq 0 ]; then
