@@ -5,7 +5,7 @@
 # from decimal import Decimal
 # from functools import cmp_to_key
 # from collections import Counter
-from itertools import permutations
+# from itertools import permutations
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
@@ -16,7 +16,7 @@ from itertools import permutations
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-import math
+# import math
 # import heapq
 # from collections import OrderedDict
 # import bisect
@@ -26,47 +26,36 @@ INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-MOD = 10**9+7
 
 '''
-https://twitter.com/e869120/status/1405659999179722754
-繰り返し二乗法を実装する問題
-a**bを高速に計算できる
-https://keita-matsushita.hatenablog.com/entry/2016/12/05/175024
+https://twitter.com/e869120/status/1406020809492090882/photo/1
+ポイントは3つ
+1つはXとYについてそれぞれ独立に考えること
+2つ目は独立にした上で発電所(a,b)の位置をずらした際に不便さがどのように変化するかを考えること
+3つ目は中央値がデータの絶対値の最小になるということ
 '''
 
 
 def main():
-    N, K = map(int, input().split())
+    N = int(input())
+    xSet = set()
+    ySet = set()
+    X = []
+    Y = []
+    for i in range(N):
+        x, y = map(int, input().split())
+        X.append(x)
+        Y.append(y)
 
-    if K == 1:
-        if N == 1:
-            print(1)
-        else:
-            print(0)
-    elif N == 1:
-        print(K % MOD)
-    elif N == 2:
-        print(K*(K-1) % MOD)
-    else:
-        print(K*(K-1)*binpower(K-2, N-2) % MOD)
+    X.sort()
+    Y.sort()
+    ans = 0
+    centerX = X[len(X)//2]
+    centerY = Y[len(Y)//2]
 
-
-'''
-繰り返し二乗法
-bをビット表現するとa**bのbが(bのn乗+,,)の合計で構成されていることを把握できる
-あとはビットが立ってるところだけ計算できる
-'''
-
-
-def binpower(a, b):
-    ans = 1
-    while b != 0:
-        if b & 1 == 1:
-            ans = ans*a % MOD
-        a = a*a % MOD
-        b = b >> 1
-    return ans
+    for i in range(N):
+        ans += abs(X[i]-centerX)+abs(Y[i]-centerY)
+    print(int(ans))
 
 
 def swap(A, i, j):
