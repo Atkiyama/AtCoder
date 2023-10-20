@@ -5,7 +5,7 @@
 # from decimal import Decimal
 # from functools import cmp_to_key
 # from collections import Counter
-# from itertools import permutations
+from itertools import permutations
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
@@ -16,45 +16,40 @@
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-# import math
+import math
 # import heapq
 # from collections import OrderedDict
 # import bisect
-from collections import deque
+# from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-'''
-https://twitter.com/e869120/status/1407109731546636289/photo/1
-dfsにおいてすでに行ったor行ってないを表現するには再起を用いたdfsが便利
-'''
-
 
 def main():
-    H, W = map(int, input().split())
-    C = [list(map(int, input().split())) for _ in range(H)]
+    N = int(input())
+    A = input()
+    count = 0
+    ansset = set()
+    for a in permutations(A, N):
+        a10 = change10(a)
+        if is_square(a10):
+            ansset.add(a10)
+    print(len(ansset))
 
-    highest = -1
-    for i in range(H):
-        for j in range(W):
-            if C[i][j] != '#':
-                history = [[False]*W]*H
-                highest = max(dfs(C, i, j, i, j history), highest)
+
+def is_square(num):
+    sqrt_num = math.sqrt(num)
+    return sqrt_num.is_integer()
 
 
-def dfs(C, i, j, ni, nj, history):
-    q = deque([(i, j)])
-    history = set()
-    while q:
-        now = q.popleft()
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                if checkIndex2(C, now[0]+i, now[1]+j):
-                    q.append((now[0]+i, now[1]+j))
-    return 0
+def change10(a):
+    sum = 0
+    for i in range(len(a)):
+        sum += int(a[len(a)-1-i])*(10**i)
+    return sum
 
 
 def swap(A, i, j):

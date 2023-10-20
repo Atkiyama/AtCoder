@@ -20,41 +20,23 @@
 # import heapq
 # from collections import OrderedDict
 # import bisect
-from collections import deque
+# from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-'''
-https://twitter.com/e869120/status/1407109731546636289/photo/1
-dfsにおいてすでに行ったor行ってないを表現するには再起を用いたdfsが便利
-'''
-
 
 def main():
-    H, W = map(int, input().split())
-    C = [list(map(int, input().split())) for _ in range(H)]
-
-    highest = -1
-    for i in range(H):
-        for j in range(W):
-            if C[i][j] != '#':
-                history = [[False]*W]*H
-                highest = max(dfs(C, i, j, i, j history), highest)
-
-
-def dfs(C, i, j, ni, nj, history):
-    q = deque([(i, j)])
-    history = set()
-    while q:
-        now = q.popleft()
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                if checkIndex2(C, now[0]+i, now[1]+j):
-                    q.append((now[0]+i, now[1]+j))
-    return 0
+    N=int(input())
+    A=list(map(int,input().split()))
+    a0=A[0]
+    for a in A:
+        if a!=a0:
+            no()
+            exit(0)
+    yes()
 
 
 def swap(A, i, j):
@@ -87,10 +69,6 @@ def change(P):
                 line.append(0)
         p.append(line)
     return p
-
-
-def basezero(num):
-    return num-1
 
 
 def checkIndex(list, i):

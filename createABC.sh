@@ -10,7 +10,7 @@ fi
 dir_name="$1"
 
 # ディレクトリを作成
-mkdir "$dir_name"
+mkdir "ABC/$dir_name"
 
 # ディレクトリが正常に作成されたか確認
 if [ $? -eq 0 ]; then

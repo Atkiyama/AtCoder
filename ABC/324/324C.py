@@ -20,41 +20,63 @@
 # import heapq
 # from collections import OrderedDict
 # import bisect
-from collections import deque
+# from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-'''
-https://twitter.com/e869120/status/1407109731546636289/photo/1
-dfsにおいてすでに行ったor行ってないを表現するには再起を用いたdfsが便利
-'''
-
 
 def main():
-    H, W = map(int, input().split())
-    C = [list(map(int, input().split())) for _ in range(H)]
+    N, Td = input().split()
+    N = int(N)
+    ans = []
+    for i in range(N):
+        S = input()
+        # Sのがでかいかどうか
 
-    highest = -1
-    for i in range(H):
-        for j in range(W):
-            if C[i][j] != '#':
-                history = [[False]*W]*H
-                highest = max(dfs(C, i, j, i, j history), highest)
+        roop = min(len(S), len(Td))
 
+        # 1文字けした場合
+        if len(Td)-1 == len(S):
+            j = 0
+            next = 0
+            while j < roop:
+                if S[j] == Td[j+next]:
+                    j += 1
+                else:
+                    next += 1
+                if next > 1:
+                    break
+            if next < 2:
+                ans.append(i+1)
 
-def dfs(C, i, j, ni, nj, history):
-    q = deque([(i, j)])
-    history = set()
-    while q:
-        now = q.popleft()
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                if checkIndex2(C, now[0]+i, now[1]+j):
-                    q.append((now[0]+i, now[1]+j))
-    return 0
+        # 一文字足した場合
+        elif len(S) == len(Td)+1:
+            j = 0
+            next = 0
+            while j < roop:
+                if S[j+next] == Td[j]:
+                    j += 1
+                else:
+                    next += 1
+                if next > 1:
+                    break
+            if next < 2:
+                ans.append(i+1)
+
+        # 完全一致
+        elif len(S) == len(Td):
+            count = 0
+            for j in range(roop):
+                if S[j] != Td[j]:
+                    count += 1
+            if count <= 1:
+                ans.append(i+1)
+
+    print(len(ans))
+    print(*ans)
 
 
 def swap(A, i, j):
