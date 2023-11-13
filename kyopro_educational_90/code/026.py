@@ -28,6 +28,7 @@ https://twitter.com/e869120/status/1387538790017769474/photo/1
 二部グラフ:隣接するグラフどうしで違う色に必ず塗り分けられるグラフのこと
 木は必ず二部グラフになるのでこの性質が使える
 '''
+
 def main():
     N=int(input())
     graph=defaultdict(list)
