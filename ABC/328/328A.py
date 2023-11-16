@@ -29,6 +29,13 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N,X=map(int,input().split())
+    A=list(map(int,input().split()))
+    ans=0
+    for i in A:
+        if i <=X:
+            ans+=i
+    print(ans)
 
 
 def swap(A, i, j):
@@ -134,49 +141,6 @@ class UnionFind():
 
     def __str__(self):
         return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
-    
-class WeightedDSU:
-    """重み付きUnionFind
-
-    wuf=WeightedDSU(N): 初期化
-    wuf.leader(x): xの根を返します。
-    wuf.merge(x,y,w): weight(x)-weight(y)でx,yを結合
-    wuf.same(x,y): xとyが同じグループに所属するかどうかを返す
-    wuf.diff(x,y): weight(x)-weight(y)を返す
-    """
-
-    def __init__(self, n: int):
-        self.par = [i for i in range(n + 1)]
-        self.rank = [0] * (n + 1)
-        self.weight = [0] * (n + 1)
-
-    def leader(self, x: int) -> int:
-        if self.par[x] == x:
-            return x
-        else:
-            y = self.leader(self.par[x])
-            self.weight[x] += self.weight[self.par[x]]
-            self.par[x] = y
-            return y
-
-    def merge(self, x: int, y: int, w: int):
-        rx = self.leader(x)
-        ry = self.leader(y)
-        if self.rank[rx] < self.rank[ry]:
-            self.par[rx] = ry
-            self.weight[rx] = w - self.weight[x] + self.weight[y]
-        else:
-            self.par[ry] = rx
-            self.weight[ry] = -w - self.weight[y] + self.weight[x]
-            if self.rank[rx] == self.rank[ry]:
-                self.rank[rx] += 1
-
-    def same(self, x: int, y: int) -> bool:
-        return self.leader(x) == self.leader(y)
-
-    def diff(self, x: int, y: int) -> bool:
-        return self.weight[x] - self.weight[y]
-
 
 
 def yes():
