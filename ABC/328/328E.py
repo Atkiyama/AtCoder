@@ -6,7 +6,7 @@
 # from functools import cmp_to_key
 # from collections import Counter
 # from itertools import permutations
-# from itertools import combinations
+from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
 # from itertools import accumulate
@@ -22,6 +22,8 @@
 # import bisect
 # from collections import deque
 from collections import defaultdict
+from atcoder.dsu import DSU
+
 INF = 10 ** 18
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
@@ -29,6 +31,25 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N,M,K=map(int,input().split())
+    ans=1<<70
+    graph=[]
+    for i in range(M):
+        u,v,w=map(int,input().split())
+        graph.append((u-1,v-1,w))
+        
+    for comb in combinations(range(M),N-1):
+       # print(g)
+        uf=DSU(N)
+        weight=0
+        for i in comb:
+            u,v,w=graph[i]
+            uf.merge(u,v)
+            weight+=int(w)
+        if len(uf.groups()) ==1:
+            ans=min(ans,weight%K)
+            
+    print(ans)
 
 
 def swap(A, i, j):

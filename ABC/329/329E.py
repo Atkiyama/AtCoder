@@ -20,7 +20,7 @@
 # import heapq
 # from collections import OrderedDict
 # import bisect
-from collections import deque
+# from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
 dx = [1, 0, -1, 0]
@@ -29,24 +29,52 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N,M=map(int,input().split())
     S=input()
-    stack=deque()
-    stack.append("dummy")
-    stack.append("dummy")
-    for i in S:
-        stack.append(i)
-        if stack[-1]=="C" and stack[-2]=="B" and stack[-3]=="A":
-            stack.pop()
-            stack.pop()
-            stack.pop()
-            
-    stack.popleft()
-    stack.popleft()
-    print(*list(stack),sep="")
+    T=input()
+    T_len=len(T)
+    now_read=""
+    now_len=0
+    skip=defaultdict(int)
+    for i in range(N):
+        if S[i]==T[now_read]:
+            now_read+=S[i]
+            now_len+=1
+        elif S[i]==T[0]:
+            now_read=S[i]
+            now_len=1
+        else:
+            now_read=""
+            now_len=0
         
- 
-   
+        if now_len==T_len:
+            skip[i-T_len]=i
     
+    now_read=0
+    now_len=0
+    i=0
+    while i<N:
+        if i in skip:
+            if now_read in T:
+                i=skip[i]
+                now_read=""
+                now_len=0
+            else:
+                no()
+        else:
+            if now_read+S[i] in T:
+                now_read+=S[i]
+                now_len+=1
+            elif S[i] in T:
+                now_read=""
+                now_len=0
+            else:
+                no()
+        
+            i+=1
+    yes()
+        
+        
 
 
 def swap(A, i, j):
@@ -152,6 +180,49 @@ class UnionFind():
 
     def __str__(self):
         return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
+    
+class WeightedDSU:
+    """重み付きUnionFind
+
+    wuf=WeightedDSU(N): 初期化
+    wuf.leader(x): xの根を返します。
+    wuf.merge(x,y,w): weight(x)-weight(y)でx,yを結合
+    wuf.same(x,y): xとyが同じグループに所属するかどうかを返す
+    wuf.diff(x,y): weight(x)-weight(y)を返す
+    """
+
+    def __init__(self, n: int):
+        self.par = [i for i in range(n + 1)]
+        self.rank = [0] * (n + 1)
+        self.weight = [0] * (n + 1)
+
+    def leader(self, x: int) -> int:
+        if self.par[x] == x:
+            return x
+        else:
+            y = self.leader(self.par[x])
+            self.weight[x] += self.weight[self.par[x]]
+            self.par[x] = y
+            return y
+
+    def merge(self, x: int, y: int, w: int):
+        rx = self.leader(x)
+        ry = self.leader(y)
+        if self.rank[rx] < self.rank[ry]:
+            self.par[rx] = ry
+            self.weight[rx] = w - self.weight[x] + self.weight[y]
+        else:
+            self.par[ry] = rx
+            self.weight[ry] = -w - self.weight[y] + self.weight[x]
+            if self.rank[rx] == self.rank[ry]:
+                self.rank[rx] += 1
+
+    def same(self, x: int, y: int) -> bool:
+        return self.leader(x) == self.leader(y)
+
+    def diff(self, x: int, y: int) -> bool:
+        return self.weight[x] - self.weight[y]
+
 
 
 def yes():

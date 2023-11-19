@@ -26,6 +26,7 @@ cp "main.py" "ABC/$dir_name/$dir_name""B.py"
 cp "main.py" "ABC/$dir_name/$dir_name""C.py"
 cp "main.py" "ABC/$dir_name/$dir_name""D.py"
 cp "main.py" "ABC/$dir_name/$dir_name""E.py"
+cp "main.py" "ABC/$dir_name/$dir_name""F.py"
 
 
 # ファイルが正常にコピーされたか確認
