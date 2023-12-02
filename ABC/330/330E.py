@@ -17,9 +17,9 @@
 # import networkx.algorithms as nxa
 # import numpy as np
 # import math
-#import heapq
+import heapq
 # from collections import OrderedDict
-# import bisect
+import bisect
 # from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
@@ -29,6 +29,22 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N,Q=map(int, input().split())
+    A=list(map(int, input().split()))
+    hasA=[0]*((10**9)+1)
+    isZero=[i for i in range(1, (10**9)+1)]
+    for a in A:
+        hasA[a]+=1
+        isZero.remove(a)
+    heapq.heapify(isZero)
+    print(isZero)
+    # for q in range(Q):
+    #     i,x=map(int, input().split())
+    #     hasA[A[i]]-=1
+    #     A[i]=x
+    #     hasA[A[i]]+=1
+    #     index=bisect.insort_left(hasA, 0)
+    #     print(index)
 
 
 def swap(A, i, j):
@@ -178,61 +194,6 @@ class WeightedDSU:
         return self.weight[x] - self.weight[y]
 
 
-# 削除可能ヒープ
-# self.heap: ヒープ
-# self.delete_heap: 削除予約待ちのヒープ
-# self.item_cnt: defaultdict(key:heapの要素からdelete_heapを除いた要素，value:その要素が何個あるか)
-# len(): ヒープから削除予約待ちのヒープを除いた要素数
-# __repr__(): ヒープから削除予約待ちのヒープを除いた要素をリストにして返す
-# __iter__(): ヒープから削除予約待ちのヒープを除いた要素をイテレータとして返す
-# pop(): ヒープの最小値を取り出す
-# push(item): ヒープにitemを追加する
-# remove(item): ヒープからitemを削除する(内部的には削除予約しておいて，その要素がヒープの先頭にきたら削除する)
-# get_item_cnt(item): ヒープ内のitemの個数を返す
-from heapq import *
-class DeletableHeap:
-    def __init__(self,heap):
-        self.heap = heap
-        self.delete_heap = []
-        self.item_cnt = defaultdict(int)
-        for item in heap:
-            self.item_cnt[item] += 1
-    def __len__(self):
-        return len(self.heap) - len(self.delete_heap)
-    def __repr__(self):
-        return str(list(self))
-    def __iter__(self):
-        j = 0
-        for item in self.heap:
-            if j < len(self.delete_heap):
-                if item == self.delete_heap[j]:
-                    j += 1
-                    continue
-            yield item
-    def pop(self):
-        while self.heap and self.delete_heap:
-            if self.heap[0] == self.delete_heap[0]:
-                heappop(self.heap)
-                heappop(self.delete_heap)
-            else:
-                break
-        return_item = heappop(self.heap)
-        self.item_cnt[return_item] -= 1
-        return return_item
-    def push(self,item):
-        heappush(self.heap,item)
-        self.item_cnt[item] += 1
-    def remove(self,item):
-        heappush(self.delete_heap,item)
-        self.item_cnt[item] -= 1
-        while self.heap and self.delete_heap:
-            if self.heap[0] == self.delete_heap[0]:
-                heappop(self.heap)
-                heappop(self.delete_heap)
-            else:
-                break
-    def get_item_cnt(self,item):
-        return self.item_cnt[item]
 
 def yes():
     print("Yes")
