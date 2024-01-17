@@ -9,7 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-# from itertools import accumulate
+from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -29,31 +29,21 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    D=int(input())
     N=int(input())
-    A=list(map(int,input().split()))
-    A.append(0)
-    A.insert(0,0)
-    N+=2
-    dl=[0]*N
-    dr=[0]*N
-    
-    for i in range(1,N):
-        dl[i]=min(dl[i-1]+1,A[i])
-        
-    for i in range(N-2,0,-1):
-        dr[i]=min(dr[i+1]+1,A[i])
-        
-    ans=0
-    # print(dl)
-    # print(dr)
+    B=[0]*D
     for i in range(N):
-        ans=max(ans,min(dl[i],dr[i]))
-    print(ans)
-    
-        
+        L,R=map(int,input().split())
+        L-=1
+        R-=1
+        B[L]+=1
+        if R+1 < D:
+            B[R+1]-=1
             
+    accB=list(accumulate(B))
+    for i in accB:
+        print(i)
 
-        
 
 def swap(A, i, j):
     tmp = A[i]

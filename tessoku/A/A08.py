@@ -9,7 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-# from itertools import accumulate
+from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -29,31 +29,47 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-    N=int(input())
-    A=list(map(int,input().split()))
-    A.append(0)
-    A.insert(0,0)
-    N+=2
-    dl=[0]*N
-    dr=[0]*N
-    
-    for i in range(1,N):
-        dl[i]=min(dl[i-1]+1,A[i])
-        
-    for i in range(N-2,0,-1):
-        dr[i]=min(dr[i+1]+1,A[i])
-        
-    ans=0
-    # print(dl)
-    # print(dr)
-    for i in range(N):
-        ans=max(ans,min(dl[i],dr[i]))
-    print(ans)
-    
-        
-            
+    H,W=map(int,input().split())
+    X=[list(map(int,input().split())) for _ in range(H)]
+    Z=[[0]*(W+1) for _ in range(H+1)]
+    for i in range(1, H+1):
+        for j in range(1, W+1):
+            Z[i][j] = Z[i][j-1] + X[i-1][j-1]
 
+# 縦方向に累積和をとる
+    for j in range(1, W+1):
+        for i in range(1, H+1):
+            Z[i][j] = Z[i-1][j] + Z[i][j]
+            
+    Q=int(input())
+    #print(Z)
+    for _ in range(Q):
+        A,B,C,D=map(int,input().split())
+        # A-=1
+        # B-=1
+        # C-=1
+        # D-=1
         
+        
+        right_down=Z[C][D]
+        left_down=Z[C][B-1]
+        left_up=Z[A-1][D]
+        right_up=Z[A-1][B-1]
+        
+        # if A-1<0:
+        #     right_up=0
+        #     left_up=0
+            
+        # if B-1<0:
+        #     left_down=0
+        #     left_up=0
+            
+        
+        
+        
+        ans=right_down-left_down-left_up+right_up
+        print(ans)
+
 
 def swap(A, i, j):
     tmp = A[i]
