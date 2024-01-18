@@ -22,7 +22,7 @@ cp "main.py" "tessoku/${file_type}/${file_type}${file_number}.py"
 
 # ファイルが正常に作成されたか確認
 if [ $? -eq 0 ]; then
-    echo "ファイル tessoku/${file_type}${file_number}å が正常に作成されました。"
+    echo "ファイル tessoku/${file_type}${file_number} が正常に作成されました。"
 else
     echo "ファイルの作成中にエラーが発生しました。"
 fi
