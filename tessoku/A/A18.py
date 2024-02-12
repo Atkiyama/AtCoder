@@ -23,14 +23,28 @@
 # from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
-MIN=-1*INF
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N,S=map(int,input().split())
+    A=list(map(int,input().split()))
+    dp=[[False]*(S+1) for _ in range(N+1)]
+    dp[0][0]=True
+    for i in range(N):
+        for j in range(S+1):
+            if j-A[i]>=0:
+                dp[i+1][j]=dp[i][j] or dp[i][j-A[i]]
+            else:
+                dp[i+1][j]=dp[i][j]
+    
 
+    if dp[N][S]:
+        yes()
+    else:
+        no()
 
 def swap(A, i, j):
     tmp = A[i]

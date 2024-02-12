@@ -23,14 +23,41 @@
 # from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
-MIN=-1*INF
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-
+    N,S=map(int,input().split())
+    A=list(map(int,input().split()))
+    
+    dp=[[[]]*(S+1) for _ in range(N+1)]
+    for i in range(N):
+        for j in range(S+1):
+            if j>=A[i]:
+                sumdp=sum_for_index(A,dp[i][j-A[i]])
+                if sum_for_index(A,dp[i][j-A[i]])+A[i]==j:
+                    dp[i+1][j]=dp[i][j-A[i]]+[i]
+                else:
+                    dp[i+1][j]=dp[i][j]
+            else:
+                dp[i+1][j]=dp[i][j]
+        
+    if len(dp[N][S])==0:
+        print(-1)
+    else:
+        print(len(dp[N][S]))
+        #print(sum_for_index(A,dp[N][S]))
+        for i in dp[N][S]:
+            print(i+1,end=" ")
+        
+def sum_for_index(A,indexes):
+    sum=0
+    for i in indexes:
+        sum+=A[i]
+    return sum
+        
 
 def swap(A, i, j):
     tmp = A[i]

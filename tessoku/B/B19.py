@@ -23,13 +23,39 @@
 # from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
-MIN=-1*INF
+MIN = INF*-1
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N,W=map(int,input().split())
+    V=1000
+    w=[0]*N
+    v=[0]*N
+    for i in range(N):
+        w[i],v[i]=map(int,input().split())
+        
+    """_summary_
+    dp[N番目までを使って][価値がVになる最小の重さ]
+    """
+    dp=[[INF]*(V*N+1) for _ in range(N+1)]
+    dp[0][0]=0
+    
+    for i in range(N):
+        for j in range(V*N+1):
+            if j-v[i]>=0:
+                dp[i+1][j]=min(dp[i][j],dp[i][j-v[i]]+w[i])  
+            else:
+                dp[i+1][j]=dp[i][j]
+                
+    for i in  reversed(range(V*N+1)):
+        if dp[N][i]<=W:
+            print(i)
+            break
+        
+        
 
 
 def swap(A, i, j):
