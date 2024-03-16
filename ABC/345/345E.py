@@ -30,19 +30,6 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-    S=input()
-    a=S[0]
-    b=S[1]
-    
-    if a==b:
-        for i in range(len(S)):
-            if S[i]!=a:
-                print(i+1)
-    else:
-        if a==S[2]:
-            print(2)
-        else:
-            print(1)
 
 
 def swap(A, i, j):

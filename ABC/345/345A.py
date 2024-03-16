@@ -31,18 +31,21 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 def main():
     S=input()
-    a=S[0]
-    b=S[1]
-    
-    if a==b:
+    if S[0]=="<" and S[-1]==">":
         for i in range(len(S)):
-            if S[i]!=a:
-                print(i+1)
+            if S[i]=="=":
+                pass
+            elif i==0 or i==len(S)-1:
+                pass
+            else:
+                no()
+                exit()
+                
+        yes()
     else:
-        if a==S[2]:
-            print(2)
-        else:
-            print(1)
+        no()
+        exit()
+                
 
 
 def swap(A, i, j):

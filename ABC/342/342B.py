@@ -30,7 +30,18 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-
+    N=int(input())
+    P=list(map(int,input().split()))
+    Q=int(input())
+    for i in range(Q):
+        A,B=map(int,input().split())
+        for p in P:
+            if p==A:
+                print(A)
+                break
+            elif p==B:
+                print(B)
+                break
 
 def swap(A, i, j):
     tmp = A[i]

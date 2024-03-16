@@ -28,21 +28,70 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
+N,H,W=map(int,input().split())
+A=[]
+B=[]
+for i in range(N):
+    a,b=map(int,input().split())
+    A.append(a)
+    B.append(b)
+    
+
+        
 
 def main():
-    S=input()
-    a=S[0]
-    b=S[1]
-    
-    if a==b:
-        for i in range(len(S)):
-            if S[i]!=a:
-                print(i+1)
+    #使うかどうかのビット
+    mass=[[0]*W for _ in range(H)]
+    for j in range(2**N):
+        #回転するかのビット
+        for k in range(2**N): 
+            for l in range(H):
+                for n in range(W): 
+                    ans=dfs(j,k,0,l,n,mass)
+                    if ans:
+                        print("Yes")
+                        exit()
+    no()
+
+
+
+def dfs(isuse,isreverse,panel,ai,bj,mass):
+    a,b=A[panel],B[panel]
+    if isreverse>>panel&1:
+        tmp=a
+        a=b
+        b=tmp
+        
+        
+    elif isuse>>panel&1 and panel<N-1:
+        dfs(isuse,isreverse,panel+1,a,b,mass)
+        
+        
+    if a+ai<=H and b+bj<=W:
+        for i in range(a):
+            for j in range(b):
+                mass[i+ai][j+bj]+=1
     else:
-        if a==S[2]:
-            print(2)
-        else:
-            print(1)
+        return False
+    
+    if panel==N-1 and check(mass):
+        return True
+    elif panel < N-1:
+        for i in range(H):
+            for j in range(W):
+                dfs(isuse,isreverse,panel+1,i,j,mass)
+    else:
+        return False
+            
+    
+    
+def check(mass):
+    for i in range(H):
+        for j in range(W):
+            if mass[i][j]!=1:
+                return False
+    return True
+                
 
 
 def swap(A, i, j):

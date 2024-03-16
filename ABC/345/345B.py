@@ -30,19 +30,35 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-    S=input()
-    a=S[0]
-    b=S[1]
+
     
-    if a==b:
-        for i in range(len(S)):
-            if S[i]!=a:
-                print(i+1)
+    X=int(input())
+    if (X//10)*10==X:
+        print(X//10)
+    elif X<0:
+        print(X//10+1)
     else:
-        if a==S[2]:
-            print(2)
-        else:
-            print(1)
+        print(X//10+1)
+    
+    # intX=X//10
+    # flX=X/10
+    # print(intX,flX)
+    # print(float(intX),flX)
+    # print("{:.16f}".format(flX))
+    
+    # if intX==flX:
+    #     print(intX)
+    # elif flX<0:   
+    #     print(int(flX))
+    # elif flX>=0:
+    #     print(int(flX)+1)
+    
+    # print(12345678912345678*10)
+    # if 12345678912345678*10==123456789123456789:
+    #     print("Yes")
+    # else:
+    #     print("No")
+
 
 
 def swap(A, i, j):

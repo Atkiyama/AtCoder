@@ -16,7 +16,7 @@
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-# import math
+import math
 #import heapq
 # from collections import OrderedDict
 # import bisect
@@ -31,18 +31,24 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 def main():
     S=input()
-    a=S[0]
-    b=S[1]
-    
-    if a==b:
-        for i in range(len(S)):
-            if S[i]!=a:
-                print(i+1)
-    else:
-        if a==S[2]:
-            print(2)
-        else:
-            print(1)
+    N=len(S)
+    dict=defaultdict(int)
+    for i in S:
+        dict[i]+=1
+        
+    ans=0
+    for i in range(N):
+        ans+=i
+
+    flag=False
+    for i in dict.values():
+        if i>2:
+            ans-=math.comb(i,2)
+            flag=True
+    if flag:
+        ans+=1
+    print(ans)
+ 
 
 
 def swap(A, i, j):

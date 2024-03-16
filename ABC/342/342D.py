@@ -16,7 +16,7 @@
 # import networkx as nx
 # import networkx.algorithms as nxa
 # import numpy as np
-# import math
+import math
 #import heapq
 # from collections import OrderedDict
 # import bisect
@@ -30,6 +30,20 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    MAX=2*(10**5)
+
+        
+    N=int(input())
+    A=list(map(int,input().split()))
+    S=[0]*(MAX+1)
+    for i in range(1,MAX+1):
+        S[i]=i
+    for d in reversed(range(2,math.sqrt(MAX))):
+        for k in range(1,X/d/d):
+            if S[k*d*d]%(d*d)==0:
+                S[k*d*d]/=d*d
+        
+    
 
 
 def swap(A, i, j):

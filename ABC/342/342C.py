@@ -4,7 +4,7 @@
 # # input = sys.stdin.readline
 # from decimal import Decimal
 # from functools import cmp_to_key
-# from collections import Counter
+from collections import Counter
 # from itertools import permutations
 # from itertools import combinations
 # from itertools import combinations_with_replacement
@@ -20,7 +20,7 @@
 #import heapq
 # from collections import OrderedDict
 # import bisect
-# from collections import deque
+from collections import deque
 from collections import defaultdict
 INF = 10 ** 18
 MIN=-1*INF
@@ -28,8 +28,32 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-
 def main():
+    N = int(input())
+    S = input()
+    Q = int(input())
+    dict = defaultdict(str)
+ 
+    #AからZまでの辞書を作成
+    for i in range(97, 123):
+        dict[chr(i)]=chr(i)
+        
+
+    for i in range(Q):
+        c, d = input().split()
+
+        for k,v in dict.items():
+            if v==c:
+                dict[k]=d
+                
+            
+    for i in range(N):
+        print(dict[S[i]], end="")
+
+        
+
+    
+
 
 
 def swap(A, i, j):
