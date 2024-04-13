@@ -36,97 +36,67 @@ R=[0]*N
 C=[0]*N
 E=[0]*N
 dict=defaultdict(int)
+graph=defaultdict(set)
+sx,sy,gx,gy=0,0,0,0
+for i in range(H):
+    for j in range(W):
+        if A[i][j]=="S":
+            sx,sy=i,j
+        elif A[i][j]=="T":
+            gx,gy=i,j
 for i in range(N):
     R[i],C[i],E[i]=map(int,input().split())
+    R[i]-=1
+    C[i]-=1
+    A[R[i]][C[i]]="E"
 
 def main():
-    start=(-1,-1)
-    goal=(-1,-1)
-    for i in range(H):
-        for j in range(W):
-            if A[i][j]=='S':
-                start=(i,j)
-            elif A[i][j]=='G':
-                goal=(i,j)
-    E=-1
-
     for i in range(N):
-        if (R[i],C[i])==start:
-            E=E[i]
-        elif (R[i],C[i])!=goal:
-            A[i][j]='E'
-        dict[(R[i],C[i])]=E[i]
+        bfs1(i)
 
-    if(dfs(start[0],start[1],goal[0],goal[1],E,set())):
-        yes()
-    else:
-        no()
-        
-def dfs(x, y, goal_x, goal_y, E, history):
-    if (x, y) == (goal_x, goal_y):
-        yes()
-        exit()
-    
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < H and 0 <= ny < W and A[nx][ny] != '#' and (nx, ny) not in history and E <= len(history):
-            if A[nx][ny] == '.':
-                history.add((nx, ny))
-                dfs(nx, ny, goal_x, goal_y, E, history)
-                history.remove((nx, ny))
-            elif A[nx][ny] == 'E' and E < dict[(nx, ny)]:
-                new_E = dict[(nx, ny)]
-                dict.remove((nx, ny))
-                history = set()
-                history.add((nx, ny))
-                dfs(nx, ny, goal_x, goal_y, new_E, history)
-            elif A[nx][ny] == 'G':
-                return True
-    history.remove((x, y))
-    
-    return False
-
-# この関数を呼び出すときは、スタート地点とゴール地点の座標、現在のエネルギー、および既訪問のセットを渡します。
-# 例: dfs(start_x, start_y, goal_x, goal_y, current_energy, set())
+   
 
 
-# def dfs(start,goal,E):
-#     # visited=[[False]*W for _ in range(H)]
-#     # visited[start[0]][start[1]]=True
-#     q=deque()
-#     history=set()
-#     q.append((start[0],start[1],0))
-#     while q:
-#         x,y=q.popleft()
-#         if (x,y)==goal:
-#             yes()
-#             exit()
-#         for i in range(4):
-#             nx=x+dx[i]
-#             ny=y+dy[i]
-#             if 0<=nx<H and 0<=ny<W and A[nx][ny]!='#' and (nx,ny) not in history and E<=len(history):
-#             #and not visited[nx][ny]:
-#                 if A[nx][ny]=='.':
-#                     history.add((nx,ny))
-#                     #visited[nx][ny]=True
-#                     q.append((nx,ny))
-#                 elif A[nx][ny]=='E' and E<dict[(nx,ny)]:
-#                     E=dict[(nx,ny)]
-#                     dict.remove((nx,ny))
-#                     history=set()
-#                     history.add((nx,ny))
-#                     # visited=[[False]*W for _ in range(H)]
-#                     # visited[nx][ny]=True
-#                 elif A[nx][ny]=='G':
-#                    return True
-        
-#     return False
-                
+    bfs2(sx,sy,gx,gy)
+
+def bfs1(i):
+    dist=[[INF]*W for _ in range(H)]
+    q=deque()
+    r,c=R[i],C[i]
+    q.append((R[i],C[i]))
+    dist[R[i]][C[i]]=0
+    while q:
+        x,y=q.popleft()
+        for j in range(4):
+            nx=x+dx[j]
+            ny=y+dy[j]
+            if 0<=nx<H and 0<=ny<W and A[nx][ny]!='#' and dist[nx][ny]==INF:
+                q.append((nx,ny))
+                dist[nx][ny] = min(dist[x][y]+1,dist[nx][ny])
+                if A[nx][ny]!="." and dist[nx][ny] <= E[i]:
+                    graph[(R[i],C[i])].add((nx,ny))
 
                 
-    return False
+def bfs2(sx,sy,gx,gy):
+    history=set()
+    q=deque()
+    q.append((sx,sy))
+    history.add((sx,sy))
+    # for x,y in graph[(sx,sy)]:
+    #     q.append((x,y))
+    while q:
+        nx,ny=q.popleft()
+        gr=graph[(nx,ny)]
+        for x,y in graph[(nx,ny)]:
+            if (x,y) not in history:
+                history.add((x,y))
+                q.append((x,y))
+            if x==gx and y==gy:
+                yes()
+                return
+    no()
 
+                    
 
 
 
