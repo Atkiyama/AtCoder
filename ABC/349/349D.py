@@ -1,7 +1,7 @@
 # from functools import lru_cache
-# import sys
-# sys.setrecursionlimit(10**9)
-# input = sys.stdin.readline
+import sys
+sys.setrecursionlimit(10**9)
+# # input = sys.stdin.readline
 # from decimal import Decimal
 # from functools import cmp_to_key
 # from collections import Counter
@@ -17,20 +17,134 @@
 # import networkx.algorithms as nxa
 # import numpy as np
 # import math
-# import heapq
+#import heapq
 # from collections import OrderedDict
-# import bisect
+import bisect
 # from collections import deque
-# from collections import defaultdict
+from collections import defaultdict
 INF = 10 ** 18
 MIN=-1*INF
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
+L,R=map(int,input().split())
+# L,R=3,19
+binary=[pow(2,i) for i in range(62)]
 
 def main():
-    print("てsと")
+    # print(2**60)
+    
+    # a=bisect.bisect_left(binary,9)
+    # print(a)
+    # print(binary[a-1])
+    ans1=solve1()
+    ans2=solve2()
+    if len()
+
+def solve1():
+    l=L
+    r=L+1
+    ans=[]
+    # print("てsつお")
+    # print(solve(3))
+    if L==0:
+        print(1)
+        print(L,R)
+        exit(0)
+    else:
+        while 0<r<=R:
+            r=solve1_1(l)
+            if r!=-1:
+                ans.append((l,r))
+            #print(S(l,r))
+            l=r
+            #print(r)
+        print(len(ans))
+        for i in ans:
+            print(*i)
+        
+def solve1_1(l):
+    ans=-1
+    # for j in reversed(range(l,1)):
+    #     if l%j==0:
+    #         index=bisect.bisect_left(binary,l//j)
+    #         i=binary[index]
+    #         if l==(pow(2,i))*j and pow(2,i)*(j+1)<=R:
+    #             ans=max(pow(2,i)*(j+1),ans)
+    iMAX=bisect.bisect_left(binary,l)
+    
+    # ans=-1
+    for i in reversed(range(iMAX+1)):
+        
+        pows=pow(2,i)
+        j=l//(pows)
+        if l==(pows)*j and pows*(j+1)<=R:
+            ans=pows*(j+1)
+            return ans
+
+    return ans
+
+def solve2():
+    l=R-1
+    r=R
+    ans=[]
+    # print("てsつお")
+    # print(solve(3))
+
+    while L<=l<=R:
+        l=solve2_1(r)
+        if r!=-1:
+            ans.append((l,r))
+            #print(S(l,r))
+        r=l
+            #print(r)
+    return ans
+
+
+def solve2_1(r):
+    iMAX=bisect.bisect_left(binary,r)
+    
+    # ans=-1
+    for i in range(iMAX+1):
+        
+        pows=pow(2,i)
+        j=r//(pows)-1
+        if r==(pows)*(j+1) and L<=pows*(j)<=R:
+            ans=pows*(j)
+            return ans
+
+    
+
+# def bisect_left(l):
+#     ok=l
+#     ng=R
+#     while ng-ok > 1:
+#         mid = (ok+ng) // 2 # 平均(小数切り捨て)
+#         if is_ok(l,mid):
+#             ok = mid
+#         else:
+#             ng = mid
+#     return ok
+
+def is_ok(l,x):
+    i=0
+    while i<=l:
+        j=l//(pow(2,i))
+        if pow(2,i)*(j+1)==x:
+            return True
+        i+=1
+    return False
+    
+
+def gS(i,j):
+    return(S(pow(2,i)*j,pow(2,i)*(j+1))) 
+
+def S(l,r):
+    index=[]
+    for i in range(l,r):
+        index.append(i)
+    return index
 
 
 def swap(A, i, j):

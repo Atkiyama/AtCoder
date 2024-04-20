@@ -1,7 +1,7 @@
 # from functools import lru_cache
 # import sys
 # sys.setrecursionlimit(10**9)
-# input = sys.stdin.readline
+# # input = sys.stdin.readline
 # from decimal import Decimal
 # from functools import cmp_to_key
 # from collections import Counter
@@ -17,11 +17,11 @@
 # import networkx.algorithms as nxa
 # import numpy as np
 # import math
-# import heapq
+#import heapq
 # from collections import OrderedDict
 # import bisect
 # from collections import deque
-# from collections import defaultdict
+from collections import defaultdict
 INF = 10 ** 18
 MIN=-1*INF
 dx = [1, 0, -1, 0]
@@ -30,7 +30,9 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-    print("てsと")
+    N=int(input())
+    A=list(map(int,input().split()))
+    print(0-sum(A))
 
 
 def swap(A, i, j):
