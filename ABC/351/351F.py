@@ -19,9 +19,12 @@
 # import math
 # import heapq
 # from collections import OrderedDict
-# import bisect
+import bisect
 # from collections import deque
 from collections import defaultdict
+from atcoder.fenwicktree import FenwickTree
+
+
 INF = 10 ** 18
 MIN=-1*INF
 dx = [1, 0, -1, 0]
@@ -30,7 +33,151 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-    
+    N = int(input())
+    A = list(map(int, input().split()))
+    B=sorted([x for x in set(A)])
+
+    M=len(B)
+    #個数
+    C=FenwickTree(M)
+    #総和
+    S=FenwickTree(M)
+    ans=0
+
+    for i in reversed(range(N)):
+        idx=bisect.bisect_left(B,A[i])
+        c=C.sum(idx,M)
+        s=S.sum(idx,M)
+        C.add(idx,1)
+        S.add(idx,A[i])
+        ans+=s-c*A[i]
+    print(ans)
+
+def main2():
+    N = int(input())
+    A = list(map(int, input().split()))
+    # Aを座標圧縮
+    A_comp = {a: i for i, a in enumerate(sorted(set(A)))}
+    # 逆引き
+    A_comp_inv = {i: a for a, i in A_comp.items()}
+    A = [A_comp[a] for a in A]
+    # nより小さい数の個数と総和を別で持っておく
+    seg_cnt = SegTree(lambda x, y: x + y, lambda: 0, len(A_comp))
+    seg_sum = SegTree(lambda x, y: x + y, lambda: 0, len(A_comp))
+    ans = 0
+    for a in A:
+        seg_cnt.add(a, 1)
+        seg_sum.add(a, A_comp_inv[a])
+        # 総和を求める
+        #このときseg_cnt.prod(0, a) * A_comp_inv[a]をすることでaがAjになる分を加算する
+        #また、seg_sum.prod(0, a)はそのときに引かれる分を引く
+        ans += seg_cnt.prod(0, a) * A_comp_inv[a] - seg_sum.prod(0, a)
+    print(ans)
+
+# セグメント木
+# op: op(x,y) return x*y みたいな演算(関数)
+# e: 単位元を返す関数，op(x,e()) = op(e(),x) = x になるようなe
+# n: 要素数
+# v: 要素の配列
+class SegTree:
+    def __init__(self, op, e, n, v=None):
+        # 要素数
+        self._n = n
+        # 二項演算
+        self._op = op
+        # 単位元を返す関数
+        self._e = e
+        # セグメント木の深さ(根は0)
+        self._log = (n - 1).bit_length()
+        # 葉の数
+        self._size = 1 << self._log
+        # セグメント木(0番目の要素は使わない，1番目の要素が根)
+        self._d = [self._e()] * (self._size << 1)
+        if v is not None:
+            for i in range(self._n):
+                self._d[self._size + i] = v[i]
+            for i in range(self._size - 1, 0, -1):
+                self._d[i] = self._op(self._d[i << 1], self._d[i << 1 | 1])
+    # p番目の要素をxに変更(pは0-indexed)
+    def set(self, p, x):
+        p += self._size
+        self._d[p] = x
+        while p:
+            self._d[p >> 1] = self._op(self._d[p], self._d[p ^ 1])
+            p >>= 1
+    # p番目の要素にxを加算(pは0-indexed)
+    def add(self, p, x):
+        p += self._size
+        self._d[p] += x
+        while p:
+            self._d[p >> 1] = self._op(self._d[p], self._d[p ^ 1])
+            p >>= 1
+    # p番目の要素を返す(pは0-indexed)
+    def get(self, p):
+        return self._d[p + self._size]
+    # op(d[l], d[l+1], ..., d[r-1])を返す(l,rは0-indexedの半開区間)
+    def prod(self, l, r):
+        sml, smr = self._e(), self._e()
+        l += self._size
+        r += self._size
+        while l < r:
+            if l & 1:
+                sml = self._op(sml, self._d[l])
+                l += 1
+            if r & 1:
+                r -= 1
+                smr = self._op(self._d[r], smr)
+            l >>= 1
+            r >>= 1
+        return self._op(sml, smr)
+    # op(d[0], d[1], ..., d[n-1])を返す
+    def all_prod(self):
+        return self._d[1]
+"""
+Binary Indexed Tree (BIT)を実装したクラス
+区間の和をlogNで求めることができる
+詳しくは以下の記事を参照
+https://algo-logic.info/binary-indexed-tree/
+転倒数を調べるのに使える
+https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
+"""
+class BIT:
+    """
+    N: 要素数
+    Nをもとにbitを初期化する
+    """
+    def __init__(self,N):
+        self.N=N
+        self.bit=[0]*(N+1)
+
+    """
+    i番目の要素にxを加算する
+    i: 1-indexed
+    x: 加算する値
+    """
+
+    def add(self,i,x):
+        idx=i
+        while idx<=self.N:
+            self.bit[idx]+=x
+            idx+=idx&(-idx)
+
+
+    """
+    i番目までの要素の和を求める
+    i: 1-indexed
+    戻り値: 0~i番目までの和
+    """
+
+    def sum(self,i):
+        idx=i
+        ans=0
+        while idx>0:
+            ans+=self.bit[idx]
+            idx-=(-idx)&idx
+        return ans
+
+
 
 
 def swap(A, i, j):
@@ -86,106 +233,6 @@ def checkIndex2(list, i, j):
     else:
         return False
 
-	# index_listをリストを区間Kで探索し、区間内の(最大値-最小値)の最小値を求める
-class SegTree:
-    """
-    init(init_val, ide_ele): 配列init_valで初期化 O(N)
-    update(k, x): k番目の値をxに更新 O(logN)
-    query(l, r): 区間[l, r)をsegfuncしたものを返す O(logN)
-    """
-    def __init__(self, init_val, segfunc, ide_ele):
-        """
-        init_val: 配列の初期値
-        segfunc: 区間にしたい操作
-        ide_ele: 単位元
-        n: 要素数
-        num: n以上の最小の2のべき乗
-        tree: セグメント木(1-index)
-        """
-        n = len(init_val)
-        self.segfunc = segfunc
-        self.ide_ele = ide_ele
-        self.num = 1 << (n - 1).bit_length()
-        self.tree = [ide_ele] * 2 * self.num
-        # 配列の値を葉にセット
-        for i in range(n):
-            self.tree[self.num + i] = init_val[i]
-        # 構築していく
-        for i in range(self.num - 1, 0, -1):
-            self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
-    def update(self, k, x):
-        """
-        k番目の値をxに更新
-        k: index(0-index)
-        x: update value
-        """
-        k += self.num
-        self.tree[k] = x
-        while k > 1:
-            self.tree[k >> 1] = self.segfunc(self.tree[k], self.tree[k ^ 1])
-            k >>= 1
-    def query(self, l, r):
-        """
-        [l, r)のsegfuncしたものを得る
-        l: index(0-index)
-        r: index(0-index)
-        """
-        res = self.ide_ele
-        l += self.num
-        r += self.num
-        while l < r:
-            if l & 1:
-                res = self.segfunc(res, self.tree[l])
-                l += 1
-            if r & 1:
-                res = self.segfunc(res, self.tree[r - 1])
-            l >>= 1
-            r >>= 1
-        return res
-
-"""
-Binary Indexed Tree (BIT)を実装したクラス
-区間の和をlogNで求めることができる
-詳しくは以下の記事を参照
-https://algo-logic.info/binary-indexed-tree/
-転倒数を調べるのに使える
-https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
-"""
-class BIT:
-    """
-    N: 要素数
-    Nをもとにbitを初期化する
-    """
-    def __init__(self,N):
-        self.N=N
-        self.bit=[0]*(N+1)
-
-    """
-    i番目の要素にxを加算する
-    i: 1-indexed
-    x: 加算する値
-    """
-
-    def add(self,i,x):
-        idx=i
-        while idx<=self.N:
-            self.bit[idx]+=x
-            idx+=idx&(-idx)
-
-
-    """
-    i番目までの要素の和を求める
-    i: 1-indexed
-    戻り値: 0~i番目までの和
-    """
-
-    def sum(self,i):
-        idx=i
-        ans=0
-        while idx>0:
-            ans+=self.bit[idx]
-            idx-=(-idx)&idx
-        return ans
 
 class UnionFind():
     def __init__(self, n):

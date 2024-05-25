@@ -30,63 +30,35 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
-    
+    N=int(input())
+    A=list(map(int,input().split()))
+    #print(inversion_bit(A))
 
-
-def swap(A, i, j):
-    tmp = A[i]
-    A[i] = A[j]
-    A[j] = tmp
-
-# ポリオミノを右に90度回転
-
-
-def rotate(matrix):
-    N = len(matrix)
-    M = len(matrix[0])
-    rotated = [[0] * N for _ in range(M)]
+    seg=SegTree(A,segfunc,INF)
+    ans=0
     for i in range(N):
-        for j in range(M):
-            rotated[j][N-1-i] = matrix[i][j]
-    return rotated
+        for j in range(i+1,N):
+            ans+=max((seg.query(i,j)),0)
+    print(ans)
+
+def inversion_bit(A):
+    N=len(A)
+    ans=[0]*N
+    bit=[False]*N
+    for i in range(N):
+        bit[i]=True
+        count=0
+        for j in range(i):
+            if bit[j]:
+                count+=1
+        ans[i]=count
+    return ans
+
+def segfunc(x, y):
+    return y+x
 
 
-# # と .で表現された二次元配列を01で表現する
-def change(P):
-    p = []
-    for i in P:
-        line = []
-        for j in i:
-            if j == '#':
-                line.append(1)
-            else:
-                line.append(0)
-        p.append(line)
-    return p
 
-
-def basezero(num):
-    return num-1
-
-
-def checkIndex(list, i):
-    length = len(list)
-
-    if 0 <= i < length:
-        return True
-    else:
-        return False
-
-
-def checkIndex2(list, i, j):
-    H = len(list)
-    W = len(list[0])
-    if 0 <= i < H and 0 <= j < W:
-        return True
-    else:
-        return False
-
-	# index_listをリストを区間Kで探索し、区間内の(最大値-最小値)の最小値を求める
 class SegTree:
     """
     init(init_val, ide_ele): 配列init_valで初期化 O(N)
@@ -143,49 +115,59 @@ class SegTree:
             r >>= 1
         return res
 
-"""
-Binary Indexed Tree (BIT)を実装したクラス
-区間の和をlogNで求めることができる
-詳しくは以下の記事を参照
-https://algo-logic.info/binary-indexed-tree/
-転倒数を調べるのに使える
-https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
-"""
-class BIT:
-    """
-    N: 要素数
-    Nをもとにbitを初期化する
-    """
-    def __init__(self,N):
-        self.N=N
-        self.bit=[0]*(N+1)
+def swap(A, i, j):
+    tmp = A[i]
+    A[i] = A[j]
+    A[j] = tmp
 
-    """
-    i番目の要素にxを加算する
-    i: 1-indexed
-    x: 加算する値
-    """
-
-    def add(self,i,x):
-        idx=i
-        while idx<=self.N:
-            self.bit[idx]+=x
-            idx+=idx&(-idx)
+# ポリオミノを右に90度回転
 
 
-    """
-    i番目までの要素の和を求める
-    i: 1-indexed
-    戻り値: 0~i番目までの和
-    """
+def rotate(matrix):
+    N = len(matrix)
+    M = len(matrix[0])
+    rotated = [[0] * N for _ in range(M)]
+    for i in range(N):
+        for j in range(M):
+            rotated[j][N-1-i] = matrix[i][j]
+    return rotated
 
-    def sum(self,i):
-        idx=i
-        ans=0
-        while idx>0:
-            ans+=self.bit[idx]
-            idx-=(-idx)&idx
-        return ans
+
+# # と .で表現された二次元配列を01で表現する
+def change(P):
+    p = []
+    for i in P:
+        line = []
+        for j in i:
+            if j == '#':
+                line.append(1)
+            else:
+                line.append(0)
+        p.append(line)
+    return p
+
+
+def basezero(num):
+    return num-1
+
+
+def checkIndex(list, i):
+    length = len(list)
+
+    if 0 <= i < length:
+        return True
+    else:
+        return False
+
+
+def checkIndex2(list, i, j):
+    H = len(list)
+    W = len(list[0])
+    if 0 <= i < H and 0 <= j < W:
+        return True
+    else:
+        return False
+
 
 class UnionFind():
     def __init__(self, n):

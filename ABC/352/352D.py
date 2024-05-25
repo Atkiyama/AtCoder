@@ -28,9 +28,113 @@ dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-
 def main():
+    N, K = map(int, input().split())
+    P = list(map(int, input().split()))
+
+    # ソート結果を再利用する
+    P2 = sorted((p, i) for i, p in enumerate(P))
+
+    # セグメント木の構築
+    seg_index = [i for _, i in P2]
+    seg_tree = SegmentTree(seg_index)
+
+    ans = INF
+    # 最後の要素を除外して処理
+    for p, i in P2:
+        index=p + K-2
+        if index>=N:
+            continue
+        ans=min(seg_tree.query_difference(p-1, index),ans)
+    print(ans)
+
+
+# def main():
+#     N,K=map(int,input().split())
+#     P=list(map(int,input().split()))
+#     P2=[]
+#     for i in range(N):
+#         P2.append((P[i],i))
+#     P2.sort()
+#     #メモ　いい数列があることが確定さえすればわざわざ探索はいらない
+#     seg_index=[0]*N
+   
+#     for i in range(N):
+#         seg_index[i]=P2[i][1]
+#     seg_tree = SegmentTree(seg_index)
     
+#     ans=INF
+#     for p, i in P2:  # 最後の要素を除外する
+#         index=p + K-2
+#         if index>=N:
+#             continue
+#         ans=min(seg_tree.query_difference(p-1, index),ans)
+#     print(ans)
+
+
+
+import sys
+from math import ceil, log2
+
+class SegmentTree:
+    def __init__(self, arr):
+        self.n = len(arr)
+        height = ceil(log2(self.n))
+        size = 2 * (2 ** height) - 1
+        self.tree = [(0, 0)] * size
+        self.build_tree(arr, 0, 0, self.n - 1)
+
+    def build_tree(self, arr, node, start, end):
+        if start == end:
+            self.tree[node] = (arr[start], arr[start])
+        else:
+            mid = (start + end) // 2
+            left_child = 2 * node + 1
+            right_child = 2 * node + 2
+            self.build_tree(arr, left_child, start, mid)
+            self.build_tree(arr, right_child, mid + 1, end)
+            self.tree[node] = (max(self.tree[left_child][0], self.tree[right_child][0]),
+                               min(self.tree[left_child][1], self.tree[right_child][1]))
+
+    def query(self, left, right):
+        def _query(node, start, end, left, right):
+            if left > end or right < start:
+                return (-sys.maxsize - 1, sys.maxsize)
+            if left <= start and end <= right:
+                return self.tree[node]
+            mid = (start + end) // 2
+            left_child = 2 * node + 1
+            right_child = 2 * node + 2
+            left_result = _query(left_child, start, mid, left, right)
+            right_result = _query(right_child, mid + 1, end, left, right)
+            return (max(left_result[0], right_result[0]), min(left_result[1], right_result[1]))
+        return _query(0, 0, self.n - 1, left, right)
+
+    def query_difference(self, left, right):
+        max_val, min_val = self.query(left, right)
+        return max_val - min_val
+
+    def update(self, index, value):
+        def _update(node, start, end):
+            if start == end:
+                self.tree[node] = (value, value)
+            else:
+                mid = (start + end) // 2
+                if index <= mid:
+                    _update(2 * node + 1, start, mid)
+                else:
+                    _update(2 * node + 2, mid + 1, end)
+                left_child = 2 * node + 1
+                right_child = 2 * node + 2
+                self.tree[node] = (max(self.tree[left_child][0], self.tree[right_child][0]),
+                                   min(self.tree[left_child][1], self.tree[right_child][1]))
+        _update(0, 0, self.n - 1)
+
+
+
+
+
+
 
 
 def swap(A, i, j):
@@ -86,106 +190,6 @@ def checkIndex2(list, i, j):
     else:
         return False
 
-	# index_listをリストを区間Kで探索し、区間内の(最大値-最小値)の最小値を求める
-class SegTree:
-    """
-    init(init_val, ide_ele): 配列init_valで初期化 O(N)
-    update(k, x): k番目の値をxに更新 O(logN)
-    query(l, r): 区間[l, r)をsegfuncしたものを返す O(logN)
-    """
-    def __init__(self, init_val, segfunc, ide_ele):
-        """
-        init_val: 配列の初期値
-        segfunc: 区間にしたい操作
-        ide_ele: 単位元
-        n: 要素数
-        num: n以上の最小の2のべき乗
-        tree: セグメント木(1-index)
-        """
-        n = len(init_val)
-        self.segfunc = segfunc
-        self.ide_ele = ide_ele
-        self.num = 1 << (n - 1).bit_length()
-        self.tree = [ide_ele] * 2 * self.num
-        # 配列の値を葉にセット
-        for i in range(n):
-            self.tree[self.num + i] = init_val[i]
-        # 構築していく
-        for i in range(self.num - 1, 0, -1):
-            self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
-    def update(self, k, x):
-        """
-        k番目の値をxに更新
-        k: index(0-index)
-        x: update value
-        """
-        k += self.num
-        self.tree[k] = x
-        while k > 1:
-            self.tree[k >> 1] = self.segfunc(self.tree[k], self.tree[k ^ 1])
-            k >>= 1
-    def query(self, l, r):
-        """
-        [l, r)のsegfuncしたものを得る
-        l: index(0-index)
-        r: index(0-index)
-        """
-        res = self.ide_ele
-        l += self.num
-        r += self.num
-        while l < r:
-            if l & 1:
-                res = self.segfunc(res, self.tree[l])
-                l += 1
-            if r & 1:
-                res = self.segfunc(res, self.tree[r - 1])
-            l >>= 1
-            r >>= 1
-        return res
-
-"""
-Binary Indexed Tree (BIT)を実装したクラス
-区間の和をlogNで求めることができる
-詳しくは以下の記事を参照
-https://algo-logic.info/binary-indexed-tree/
-転倒数を調べるのに使える
-https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
-"""
-class BIT:
-    """
-    N: 要素数
-    Nをもとにbitを初期化する
-    """
-    def __init__(self,N):
-        self.N=N
-        self.bit=[0]*(N+1)
-
-    """
-    i番目の要素にxを加算する
-    i: 1-indexed
-    x: 加算する値
-    """
-
-    def add(self,i,x):
-        idx=i
-        while idx<=self.N:
-            self.bit[idx]+=x
-            idx+=idx&(-idx)
-
-
-    """
-    i番目までの要素の和を求める
-    i: 1-indexed
-    戻り値: 0~i番目までの和
-    """
-
-    def sum(self,i):
-        idx=i
-        ans=0
-        while idx>0:
-            ans+=self.bit[idx]
-            idx-=(-idx)&idx
-        return ans
 
 class UnionFind():
     def __init__(self, n):

@@ -30,6 +30,14 @@ dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
 def main():
+    N=int(input())
+    A=list(map(int,input().split()))
+    count=0
+    bit=BIT(N)
+    for i in range(N):
+        count+=i-bit.sum(A[i])
+        bit.add(A[i],1)
+    print(count)
     
 
 
