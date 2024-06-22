@@ -9,8 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-from itertools import accumulate
-
+# from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -23,64 +22,21 @@ from itertools import accumulate
 # import bisect
 # from collections import deque
 from collections import defaultdict
-
-INF = 10**18
-MIN = -1 * INF
+INF = 10 ** 18
+MIN=-1*INF
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
-ans = set()
-
-
 def main():
-    N = int(input())
-    changes = defaultdict(int)
-
-    list = []
-    lList = []
-    rList = []
-    for i in range(N):
-        l, r = map(int, input().split())
-        list.append(l)
-        list.append(r)
-    list.sort()
-
-    current = 0
-    section = set()
-    sorted_keys = sorted(changes.keys())
-    for key in sorted_keys:
-        current += changes[key]
-        section.add(current)
-
-    for sec in section:
-        find_set_bit_combinations(sec)
-    print(len(ans))
-
-
-def find_set_bit_combinations(num):
-    # 立っているビット位置を記録
-    bits = []
-    index = 0
-    while num > 0:
-        if num & 1:
-            bits.append(index)
-        num >>= 1
-        index += 1
-
-    # ビット位置の組み合わせを生成
-    num_bits = len(bits)
-    for i in range(num_bits):
-        for j in range(i + 1, num_bits):
-            ans.add((bits[i], bits[j]))
+    
 
 
 def swap(A, i, j):
     tmp = A[i]
     A[i] = A[j]
     A[j] = tmp
-
 
 # ポリオミノを右に90度回転
 
@@ -91,7 +47,7 @@ def rotate(matrix):
     rotated = [[0] * N for _ in range(M)]
     for i in range(N):
         for j in range(M):
-            rotated[j][N - 1 - i] = matrix[i][j]
+            rotated[j][N-1-i] = matrix[i][j]
     return rotated
 
 
@@ -101,7 +57,7 @@ def change(P):
     for i in P:
         line = []
         for j in i:
-            if j == "#":
+            if j == '#':
                 line.append(1)
             else:
                 line.append(0)
@@ -110,7 +66,7 @@ def change(P):
 
 
 def basezero(num):
-    return num - 1
+    return num-1
 
 
 def checkIndex(list, i):
@@ -130,15 +86,13 @@ def checkIndex2(list, i, j):
     else:
         return False
 
-
-# index_listをリストを区間Kで探索し、区間内の(最大値-最小値)の最小値を求める
+	# index_listをリストを区間Kで探索し、区間内の(最大値-最小値)の最小値を求める
 class SegTree:
     """
     init(init_val, ide_ele): 配列init_valで初期化 O(N)
     update(k, x): k番目の値をxに更新 O(logN)
     query(l, r): 区間[l, r)をsegfuncしたものを返す O(logN)
     """
-
     def __init__(self, init_val, segfunc, ide_ele):
         """
         init_val: 配列の初期値
@@ -159,7 +113,6 @@ class SegTree:
         # 構築していく
         for i in range(self.num - 1, 0, -1):
             self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
-
     def update(self, k, x):
         """
         k番目の値をxに更新
@@ -171,7 +124,6 @@ class SegTree:
         while k > 1:
             self.tree[k >> 1] = self.segfunc(self.tree[k], self.tree[k ^ 1])
             k >>= 1
-
     def query(self, l, r):
         """
         [l, r)のsegfuncしたものを得る
@@ -191,7 +143,6 @@ class SegTree:
             r >>= 1
         return res
 
-
 """
 Binary Indexed Tree (BIT)を実装したクラス
 区間の和をlogNで求めることができる
@@ -200,17 +151,14 @@ https://algo-logic.info/binary-indexed-tree/
 転倒数を調べるのに使える
 https://scrapbox.io/pocala-kyopro/%E8%BB%A2%E5%80%92%E6%95%B0
 """
-
-
 class BIT:
     """
     N: 要素数
     Nをもとにbitを初期化する
     """
-
-    def __init__(self, N):
-        self.N = N
-        self.bit = [0] * (N + 1)
+    def __init__(self,N):
+        self.N=N
+        self.bit=[0]*(N+1)
 
     """
     i番目の要素にxを加算する
@@ -218,11 +166,12 @@ class BIT:
     x: 加算する値
     """
 
-    def add(self, i, x):
-        idx = i
-        while idx <= self.N:
-            self.bit[idx] += x
-            idx += idx & (-idx)
+    def add(self,i,x):
+        idx=i
+        while idx<=self.N:
+            self.bit[idx]+=x
+            idx+=idx&(-idx)
+
 
     """
     i番目までの要素の和を求める
@@ -230,16 +179,15 @@ class BIT:
     戻り値: 0~i番目までの和
     """
 
-    def sum(self, i):
-        idx = i
-        ans = 0
-        while idx > 0:
-            ans += self.bit[idx]
-            idx -= (-idx) & idx
+    def sum(self,i):
+        idx=i
+        ans=0
+        while idx>0:
+            ans+=self.bit[idx]
+            idx-=(-idx)&idx
         return ans
 
-
-class UnionFind:
+class UnionFind():
     def __init__(self, n):
         self.n = n
         self.parents = [-1] * n
@@ -287,9 +235,8 @@ class UnionFind:
         return group_members
 
     def __str__(self):
-        return "\n".join(f"{r}: {m}" for r, m in self.all_group_members().items())
-
-
+        return '\n'.join(f'{r}: {m}' for r, m in self.all_group_members().items())
+    
 class WeightedDSU:
     """重み付きUnionFind
 
@@ -345,22 +292,17 @@ class WeightedDSU:
 # remove(item): ヒープからitemを削除する(内部的には削除予約しておいて，その要素がヒープの先頭にきたら削除する)
 # get_item_cnt(item): ヒープ内のitemの個数を返す
 from heapq import *
-
-
 class DeletableHeap:
-    def __init__(self, heap):
+    def __init__(self,heap):
         self.heap = heap
         self.delete_heap = []
         self.item_cnt = defaultdict(int)
         for item in heap:
             self.item_cnt[item] += 1
-
     def __len__(self):
         return len(self.heap) - len(self.delete_heap)
-
     def __repr__(self):
         return str(list(self))
-
     def __iter__(self):
         j = 0
         for item in self.heap:
@@ -369,7 +311,6 @@ class DeletableHeap:
                     j += 1
                     continue
             yield item
-
     def pop(self):
         while self.heap and self.delete_heap:
             if self.heap[0] == self.delete_heap[0]:
@@ -380,13 +321,11 @@ class DeletableHeap:
         return_item = heappop(self.heap)
         self.item_cnt[return_item] -= 1
         return return_item
-
-    def push(self, item):
-        heappush(self.heap, item)
+    def push(self,item):
+        heappush(self.heap,item)
         self.item_cnt[item] += 1
-
-    def remove(self, item):
-        heappush(self.delete_heap, item)
+    def remove(self,item):
+        heappush(self.delete_heap,item)
         self.item_cnt[item] -= 1
         while self.heap and self.delete_heap:
             if self.heap[0] == self.delete_heap[0]:
@@ -394,10 +333,8 @@ class DeletableHeap:
                 heappop(self.delete_heap)
             else:
                 break
-
-    def get_item_cnt(self, item):
+    def get_item_cnt(self,item):
         return self.item_cnt[item]
-
 
 def yes():
     print("Yes")

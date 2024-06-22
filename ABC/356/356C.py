@@ -9,8 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-from itertools import accumulate
-
+# from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -31,49 +30,57 @@ dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
-ans = set()
-
-
 def main():
-    N = int(input())
-    changes = defaultdict(int)
+    N, M, K = map(int, input().split())
 
-    list = []
-    lList = []
-    rList = []
-    for i in range(N):
-        l, r = map(int, input().split())
-        list.append(l)
-        list.append(r)
-    list.sort()
+    C = [0] * M
+    A = []
+    R = [""] * M
+    for i in range(M):
+        line = list(input().split())
+        C[i] = int(line[0])
+        R[i] = line[-1]
+        A.append(set(map(int, line[1:-1])))
 
-    current = 0
-    section = set()
-    sorted_keys = sorted(changes.keys())
-    for key in sorted_keys:
-        current += changes[key]
-        section.add(current)
+    count = 0
+    for i in range(2**N):
+        allFlag = True
 
-    for sec in section:
-        find_set_bit_combinations(sec)
-    print(len(ans))
+        # M回の検証分
+        for k in range(M):
+            a = A[k]
+            # 丸の場合と罰の場合で分ける
+            if R[k] == "o":
+                flag = True
+                # それぞれのビットを検証
+                for j in range(N):
+                    # ビットが立っているかどうか
+                    isBit = i >> j & 1
+                    # そのビットが使われているかどうか
+                    isUse = j + 1 in a
+                    if isBit and isUse:
+                        pass
+                    elif isBit and not isUse:
+                        # ビットが立っているのに使われていない場合はFalse
+                        flag = False
+                        break
+                if not flag:
+                    allFlag = False
 
-
-def find_set_bit_combinations(num):
-    # 立っているビット位置を記録
-    bits = []
-    index = 0
-    while num > 0:
-        if num & 1:
-            bits.append(index)
-        num >>= 1
-        index += 1
-
-    # ビット位置の組み合わせを生成
-    num_bits = len(bits)
-    for i in range(num_bits):
-        for j in range(i + 1, num_bits):
-            ans.add((bits[i], bits[j]))
+            else:
+                flag = False
+                for j in range(N):
+                    isBit = i >> j & 1
+                    isUse = j + 1 in A
+                    # ビットが立っているのに使われていないものがある
+                    if isBit and not isUse:
+                        flag = True
+                        break
+                if flag:
+                    allFlag = False
+        if allFlag:
+            count += 1
+    print(count)
 
 
 def swap(A, i, j):

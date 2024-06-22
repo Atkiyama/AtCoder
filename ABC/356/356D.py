@@ -9,8 +9,7 @@
 # from itertools import combinations
 # from itertools import combinations_with_replacement
 # from itertools import product
-from itertools import accumulate
-
+# from itertools import accumulate
 # from itertools import groupby
 # from itertools import pairwise
 # from copy import deepcopy
@@ -26,54 +25,30 @@ from collections import defaultdict
 
 INF = 10**18
 MIN = -1 * INF
+MOD = 998244353
 dx = [1, 0, -1, 0]
 dy = [0, 1, 0, -1]
 dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-
-ans = set()
+N, M = map(int, input().split())
 
 
 def main():
-    N = int(input())
-    changes = defaultdict(int)
+    if M != 0:
+        ans = solve(M + 1)
+        ans *= N // M
+        ans += solve(N % M)
 
-    list = []
-    lList = []
-    rList = []
-    for i in range(N):
-        l, r = map(int, input().split())
-        list.append(l)
-        list.append(r)
-    list.sort()
-
-    current = 0
-    section = set()
-    sorted_keys = sorted(changes.keys())
-    for key in sorted_keys:
-        current += changes[key]
-        section.add(current)
-
-    for sec in section:
-        find_set_bit_combinations(sec)
-    print(len(ans))
+    print(ans)
 
 
-def find_set_bit_combinations(num):
-    # 立っているビット位置を記録
-    bits = []
-    index = 0
-    while num > 0:
-        if num & 1:
-            bits.append(index)
-        num >>= 1
-        index += 1
-
-    # ビット位置の組み合わせを生成
-    num_bits = len(bits)
-    for i in range(num_bits):
-        for j in range(i + 1, num_bits):
-            ans.add((bits[i], bits[j]))
+def solve(m):
+    ans = 0
+    for i in range(m):
+        # print(i, M, i.bit_count() & M)
+        ans += (i & M).bit_count()
+        ans %= MOD
+    return ans
 
 
 def swap(A, i, j):
